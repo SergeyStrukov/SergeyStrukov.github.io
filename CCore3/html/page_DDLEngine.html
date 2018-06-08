@@ -110,7 +110,7 @@ Result objects life-time is ended with the engine life-time end.
 
 <pre>
 
-template &lt;FileNameType FileName,FileTextType FileText&gt;
+template &lt;FileNameType FileName,FileTextType FileText,class ... SS&gt;
 class <span class="Att">FileEngine</span> : NoCopy
  {
    ....
@@ -121,10 +121,10 @@ class <span class="Att">FileEngine</span> : NoCopy
    static constexpr ulen DefaultMaxIncludes = 100 ;
    static constexpr ulen DefaultMaxFileLen  = MaxULen ;
   
-   explicit FileEngine(PrintBase &msg,ulen mem_cap=MaxULen,
-                                      ulen max_files=DefaultMaxFiles,
-                                      ulen max_inc=DefaultMaxIncludes,
-                                      ulen max_file_len=DefaultMaxFileLen);
+   explicit FileEngine(const SS & ... args,PrintBase &msg,ulen mem_cap=MaxULen,
+                                           ulen max_files=DefaultMaxFiles,
+                                           ulen max_inc=DefaultMaxIncludes,
+                                           ulen max_file_len=DefaultMaxFileLen);
    
    ~FileEngine();
 
@@ -175,7 +175,7 @@ class <span class="Att">FileText</span> : NoCopy
  {
   public:
 
-   FileText(StrLen file_name,ulen max_len);
+   FileText(SS ... args,StrLen file_name,ulen max_len);
 
    ~FileText();
 
@@ -188,6 +188,11 @@ class <span class="Att">FileText</span> : NoCopy
 
 <p>
 On <b>HCore</b> targets you can use the class <a href="page_FileToMem.html"><b>FileToMem</b></a> as the <b>FileText</b> template parameter.
+</p>
+
+<p>
+You may supply additional arguments using the variables <b>args</b>. They are copied from the constructor arguments of the class <b>FileEngine</b> and stored inside
+an object of this class. Then these copies are used in <b>FileText</b> constructor calls.
 </p>
 
 <h3>EvalResult</h3>
@@ -1558,6 +1563,30 @@ To use this file include it in your C++ source code inside some namespace to iso
 <p>
 Each structure definition contains the declaration of the inner structure <b>Ext</b>.
 You may provide definitions of these structures to add additional functions to work with these structures.
+</p>
+
+<p>
+You may assign some structures the extra field <b>ext</b>. To do so use the ext list of arguments of the <b>DDLTypeSet</b>.
+</p>
+
+<pre>
+
+  struct S18
+   {
+    DDL::MapText face;
+    A3 size;
+    A5 bold;
+    A5 italic;
+
+    struct Ext;
+
+    <b>ulen ext;</b>
+   };
+
+</pre>
+
+<p>
+This extra field is set to zero during the data mapping.
 </p>
 
 <p>

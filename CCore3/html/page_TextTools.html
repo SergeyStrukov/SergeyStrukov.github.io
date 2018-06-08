@@ -38,15 +38,15 @@ This header contains several simple tools to work with text and characters.
 
 <pre>
 
-inline bool <span class="Att">CharIsEOL</span>(char ch) { return ch=='\r' || ch=='\n' ; }
+bool <span class="Att">CharIsEOL</span>(OneOfTypes&lt;char,Char&gt; ch) { return ch=='\r' || ch=='\n' ; }
 
-inline bool <span class="Att">CharIsBin</span>(char ch);
+bool <span class="Att">CharIsBin</span>(OneOfTypes&lt;char,Char&gt; ch);
  
-inline bool <span class="Att">CharIsDec</span>(char ch);
+bool <span class="Att">CharIsDec</span>(OneOfTypes&lt;char,Char&gt; ch);
 
-inline bool <span class="Att">CharIsHex</span>(char ch);
+bool <span class="Att">CharIsHex</span>(OneOfTypes&lt;char,Char&gt; ch);
 
-inline int <span class="Att">CharBinValue</span>(char ch);
+int <span class="Att">CharBinValue</span>(OneOfTypes&lt;char,Char&gt; ch);
 
 </pre>
 
@@ -68,6 +68,18 @@ inline int <span class="Att">CharBinValue</span>(char ch);
 
 <p>
 <b>CharBinValue()</b> &mdash; binary value of the character, or -1 if is not a binary digit.
+</p>
+
+<h4>AllChars()</h4>
+
+<pre>
+
+void <span class="Att">AllChars</span>(FuncArgType&lt;char&gt; func);
+
+</pre>
+
+<p>
+<b>AllChars()</b> calls the given functor for all 256 values of <b>char</b>.
 </p>
 
 <h4>TextPos</h4>
@@ -118,10 +130,54 @@ Default constructor sets the initial text position: <b>line</b> is 1 and <b>col<
 
 <p>
 <b>update()</b> moves by the text fragment. The fragment must not break a sequence "\r\n".
+In UTF8-compatible mode the number of symbols is used to determine the column, not the number of bytes.
 </p>
 
 <p>
 The class is printable in the form <b>"(line=&lt;line&gt;,col=&lt;col&gt;)"</b>.
+</p>
+
+<h4>TextPosCounter</h4>
+
+<p>
+This class counts the <b>TextPos</b> over a character stream.
+</p>
+
+<pre>
+
+class <span class="Att">TextPosCounter</span> : NoCopy
+ {
+   TextPos pos;
+
+   ....
+
+  public:
+
+   TextPosCounter();
+
+   operator TextPos() const { return pos; }
+
+   void reset();
+
+   void put(char ch);
+
+   void put(char ch,ulen len);
+
+   void put(const char *str,ulen len);
+ };
+
+</pre>
+
+<p>
+<b>reset()</b> resets the class to the initial state.
+</p>
+
+<p>
+Methods <b>put()</b> are used to feed the class by characters.
+</p>
+
+<p>
+You may retrieve the current text position by the casting to the <b>TextPos</b> type.
 </p>
 
 <h4>CharPropTable</h4>
