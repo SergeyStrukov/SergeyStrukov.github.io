@@ -1,0 +1,149 @@
+<!--
+/* page_InputUtils.html */
+//----------------------------------------------------------------------------------------
+//
+//  Project: CCore 3.50
+//
+//  License: Boost Software License - Version 1.0 - August 17th, 2003 
+//
+//            see http://www.boost.org/LICENSE_1_0.txt or the local copy
+//
+//  Copyright (c) 2017 Sergey Strukov. All rights reserved.
+//
+//----------------------------------------------------------------------------------------
+-->
+
+<!DOCTYPE html>
+<html>
+
+<head>
+
+ <title>CCore -> InputUtils</title>
+
+ <link href="CCore.css" rel="stylesheet" type="text/css">
+
+</head>
+
+<body>
+
+<h2>InputUtils</h2>
+
+<p class="Files">Files <b>CCore/inc/InputUtils.h</b> <b>CCore/src/InputUtils.cpp</b></p>
+
+<p>
+This file contains a set of simple tools to work with console input.
+</p>
+
+<h4>Utilities</h4>
+
+<pre>
+
+ulen <span class="Att">PutSymbol</span>(char *ptr,ulen len,Symbol ch);
+
+ulen <span class="Att">PopSymbol</span>(const char *ptr,ulen len); // len > 0
+
+</pre>
+
+<p>
+<b>PutSymbol()</b> puts the symbol at the end of the character range (i.e. starting from the <b>ptr+len</b> position). 
+There must be enough room to store this symbol. The new range length is returned.
+</p>
+
+<p>
+<b>PopSymbol()</b> looks for the last symbol at the end of the non-empty charcter range and "pops" it from the range.
+The new range length is returned.
+</p>
+
+<h4>ReadConBase</h4>
+
+<p>
+The class <b>ReadConBase</b> implements the symbol reading from the character stream.
+It may serve as a base class in a console reader implementation.
+</p>
+
+<pre>
+
+class <span class="Att">ReadConBase</span> : NoCopy
+ {
+   ....
+
+  private:
+
+#ifndef CCORE_UTF8
+
+   virtual ulen read(char *ptr,ulen len)=0;
+
+   virtual ulen read(char *ptr,ulen len,MSec timeout)=0;
+
+#endif
+
+   virtual ulen read(char *ptr,ulen len,TimeScope time_scope)=0;
+
+  public:
+
+   ReadConBase();
+
+   ~ReadConBase();
+
+   // get
+
+   bool try_get(Symbol &amp;ret);
+
+   Symbol get();
+
+   bool get(MSec timeout,Symbol &amp;ret);
+
+   bool get(TimeScope time_scope,Symbol &amp;ret);
+ };
+
+</pre>
+
+<p>
+Reading the stream is implemented using pure virtual method(s) <b>read()</b>. 
+This method gets the buffer to read to and returns the number of received characters. 
+If there was no available characters withing given timeout, null is returned.
+An exception may be thrown in case of error.
+</p>
+
+<h4>SymbolParser</h4>
+
+<p>
+The class <b>SymbolPraser</b> parses the character stream into symbols.
+</p>
+
+<pre>
+
+class <span class="Att">SymbolParser</span> : NoCopy
+ {
+   ....
+
+  public:
+
+   SymbolParser() { reset(); }
+
+   void reset();
+
+   bool feed(StrLen &amp;text);
+
+   Symbol get();
+ };
+
+</pre>
+
+<p>
+<b>reset()</b> resets the parser into the initial state.
+</p>
+
+<p>
+<b>feed()</b> feeds the parser by the characters (<b>text</b> is updated). If a symbol is accumulated the return value is <b>true</b>.
+Otherwise <b>text</b> becomes empty.
+</p>
+
+<p>
+<b>get()</b> must be called if the previous <b>feed()</b> returned <b>true</b>. This method returns the accumulated symbol and resets the parser.
+</p>
+
+</body>
+
+</html>
+
