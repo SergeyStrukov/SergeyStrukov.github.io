@@ -1,0 +1,188 @@
+<!--
+/* page_HCore_SysSpawn.html */
+//----------------------------------------------------------------------------------------
+//
+//  Project: CCore 3.60
+//
+//  License: Boost Software License - Version 1.0 - August 17th, 2003 
+//
+//            see http://www.boost.org/LICENSE_1_0.txt or the local copy
+//
+//  Copyright (c) 2019 Sergey Strukov. All rights reserved.
+//
+//----------------------------------------------------------------------------------------
+-->
+
+<!DOCTYPE html>
+<html>
+
+<head>
+
+ <title>CCore -> HCore SysSpawn</title>
+
+ <link href="CCore.css" rel="stylesheet" type="text/css">
+
+</head>
+
+<body>
+
+<h2>HCore SysSpawn</h2>
+
+<p class="Files">Files <b>CCore/inc/sys/SysSpawn.h</b> <b>CCore/src/sys/SysSpawn.cpp</b></p>
+
+<p>
+<b>HCore</b> target support for the child process spawning includes the following components:
+</p>
+
+<h4>SpawnChild</h4>
+
+<pre>
+
+struct <span class="Att">SpawnChild</span>
+ {
+  // public
+
+  struct WaitResult
+   {
+    int status;
+    ErrorType error;
+   };
+
+  // private data
+
+  ....
+
+  // public
+
+  ErrorType spawn(char *wdir,char *path,char **argv,char **envp) noexcept; // path!=0 , argv!=0 , envp!=0
+
+  WaitResult wait() noexcept;
+ };
+
+</pre>
+
+<p>
+This struct is used to spawn a child process. 
+Initially it is dirty.
+Using the method <b>spawn()</b> on a dirty object you may spawn a new child process.
+The first argument is a new working directory for the child process, it may be null.
+The second is a path of executable file.
+The third is an argument list.
+The last is an environment list.
+Both lists are terminated with a null pointer.
+All strings here are null-terminated.
+If the spawn is successful, it makes the object initialized.
+You may call the method <b>wait()</b> on such object.
+</p>
+
+<p>
+<b>wait()</b> waits for the child process completion then returns the process status.
+It also makes the object dirty again. Don't call the <b>wait()</b> twice, even in case of error!
+</p>
+
+<h4>SpawnWaitList</h4>
+
+<pre>
+
+struct <span class="Att">SpawnWaitList</span>
+ {
+  // public
+
+  struct WaitResult
+   {
+    void *arg;
+    int status;
+    ErrorType error;
+   };
+
+  // private data
+
+  ....
+
+  // public
+
+  ErrorType init(ulen reserve) noexcept;
+
+  ErrorType exit() noexcept;
+
+  ErrorType add(SpawnChild *spawn,void *arg) noexcept; // makes spawn reusable
+
+  WaitResult wait() noexcept;
+ };
+
+</pre>
+
+<p>
+This struct implements a process wait list. 
+As usual, you have to construct the object using the method <b>init()</b> and destroy it after use by the method <b>exit()</b>.
+The argument of the <b>init()</b> reserve a space for the given number of wait slots.
+</p>
+
+<p>
+<b>add()</b> adds the initialized process with the given opaque data pointer to the wait list.
+The spawn struct becomes dirty after this call.
+</p>
+
+<p>
+<b>wait()</b> waits for the processes, included in the list. 
+Once one of them is finished, it returns the process status with the process data pointer.
+The process is removed from the list. 
+If the wait list is empty, the function does not wait, but returns nulls.
+If the <b>arg</b> is not null, it indicates, that the correspondent process is removed from the list,
+even if the <b>error</b> is not null.
+</p>
+
+<h4>GetShell</h4>
+
+<pre>
+
+StrLen <span class="Att">GetShell</span>(char buf[MaxPathLen+1]) noexcept;
+
+</pre>
+
+<p>
+This function returns the system shell path. It may use (or may not) the provided buffer.
+</p>
+
+<h4>GetEnviron</h4>
+
+<pre>
+
+struct <span class="Att">GetEnviron</span>
+ {
+  // public
+
+  struct NextResult
+   {
+    StrLen env;
+    ErrorType error;
+    bool eof;
+   };
+
+  // private data
+
+  ....
+
+  // public
+
+  ErrorType init() noexcept;
+
+  ErrorType exit() noexcept;
+
+  NextResult next() noexcept;
+ };
+
+</pre>
+
+<p>
+This structure is a cursor over environment record list. Each record is a string of the form <b>"NAME=VALUE"</b>.
+To iterate you have to create the object, then use the method <b>next()</b> to get subsequent records.
+The <b>NextResult</b> value consists of the string, the error code and the <b>eof</b> flag.
+This flag is set if there in no records anymore.
+The string is temporary and will be destroyed either by the next call of the <b>next()</b>, or <b>exit()</b>.
+</p>
+
+</body>
+
+</html>
+

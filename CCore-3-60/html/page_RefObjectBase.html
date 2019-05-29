@@ -1,0 +1,112 @@
+<!--
+/* page_RefObjectBase.html */
+//----------------------------------------------------------------------------------------
+//
+//  Project: CCore 2.00
+//
+//  License: Boost Software License - Version 1.0 - August 17th, 2003 
+//
+//            see http://www.boost.org/LICENSE_1_0.txt or the local copy
+//
+//  Copyright (c) 2016 Sergey Strukov. All rights reserved.
+//
+//----------------------------------------------------------------------------------------
+-->
+
+<!DOCTYPE html>
+<html>
+
+<head>
+
+ <title>CCore -> RefObjectBase</title>
+
+ <link href="CCore.css" rel="stylesheet" type="text/css">
+
+</head>
+
+<body>
+
+<h2>RefObjectBase</h2>
+
+<p class="Files">Files <b>CCore/inc/RefObjectBase.h</b> <b>CCore/src/RefObjectBase.cpp</b></p>
+
+<p>
+The class <b>RefObjectBase</b> appends the atomic reference counter and reference counting methods to the family of types.
+You can use this class with the class <a href="page_RefPtr.html"><b>RefPtr</b></a> to build a reference-counting smart pointer.
+</p>
+
+<pre>
+
+template &lt;class ... TT&gt;
+class <span class="Att">RefObjectBase</span> : public NoCopyBase&lt;MemBase,TT...&gt;
+ {
+   Atomic refs;
+
+  public:
+
+   RefObjectBase() { refs=1; }
+
+   virtual ~RefObjectBase() {}
+
+   void incRef() { refs++; }
+
+   bool decRef() { return (refs--)==1; }
+
+   void destroy() { delete this; }
+ };
+
+</pre>
+
+<p>
+<b>RefObjectHook</b> is an implementation of such smart pointer.
+</p>
+
+<pre>
+
+template &lt;class Base,class F,Base * NullObjectPtr()&gt;
+class <span class="Att">RefObjectHook</span>
+ {
+   RefPtr&lt;Base&gt; ptr;
+
+  protected:
+
+   explicit RefObjectHook(Base *info) : ptr(info) {}
+
+  public:
+
+   RefObjectHook() noexcept
+    : ptr(NullObjectPtr())
+    {
+     ptr->incRef();
+    }
+
+   ~RefObjectHook() {}
+
+   F * getPtr() const { return ptr.getPtr(); }
+
+   F * operator -> () const { return ptr.getPtr(); }
+
+   // extra
+
+   template &lt;class T&gt;
+   T * castPtr() const { return dynamic_cast&lt;T *&gt;(ptr.getPtr()); }
+ };
+
+</pre>
+
+<p>
+<b>Base</b> is a base, built using the <b>RefObjectBase</b> template.
+</p>
+
+<p>
+<b>F</b> is an interface type, usually it is one of the template parameters of the <b>Base</b>.
+</p>
+
+<p>
+<b>NullObjectPtr()</b> is a function, used to obtain the pointer to the static "null" object. 
+</p>
+
+</body>
+
+</html>
+

@@ -1,0 +1,260 @@
+<!--
+/* page_SpawnProcess.html */
+//----------------------------------------------------------------------------------------
+//
+//  Project: CCore 3.60
+//
+//  License: Boost Software License - Version 1.0 - August 17th, 2003 
+//
+//            see http://www.boost.org/LICENSE_1_0.txt or the local copy
+//
+//  Copyright (c) 2019 Sergey Strukov. All rights reserved.
+//
+//----------------------------------------------------------------------------------------
+-->
+
+<!DOCTYPE html>
+<html>
+
+<head>
+
+ <title>CCore -> SpawnProcess</title>
+
+ <link href="CCore.css" rel="stylesheet" type="text/css">
+
+</head>
+
+<body>
+
+<h2>SpawnProcess</h2>
+
+<p class="Files">Files <b>CCore/inc/SpawnProcess.h</b> <b>CCore/src/SpawnProcess.cpp</b></p>
+
+<p>
+This part is a collection of tools to spawn child processes. 
+It's implemented using the <a href="page_HCore_SysSpawn.html">target support</a>.
+</p>
+
+<h4>ShellPath</h4>
+
+<pre>
+
+class <span class="Att">ShellPath</span> : NoCopy
+ {
+   char buf[MaxPathLen+1];
+   StrLen path;
+
+  public:
+
+   ShellPath();
+
+   StrLen get() const { return path; }
+ };
+
+</pre>
+
+<p>
+This class construct a system shell path. Exact details, how it obtains this information are target-dependent.
+But normally on <b>Linux</b>, it comes from the environment variable <b>SHELL</b>, or fallback to <b>/bin/sh</b>.
+On <b>Windows</b> it comes from the environment variable <b>UNIXSHELL</b>, or fallback to <b>sh.exe</b>.
+</p>
+
+<h4>GetEnviron</h4>
+
+<p>
+This class can be used to iterate over environment variable records. Each record is a string of the form <b>"NAME=VALUE"</b>.
+</p>
+
+<pre>
+
+class <span class="Att">GetEnviron</span> : NoCopy
+ {
+   ....
+
+  public:
+
+   GetEnviron();
+
+   ~GetEnviron();
+
+   template &lt;FuncInitArgType&lt;StrLen&gt; FuncInit&gt;
+   auto operator () (FuncInit func_init);
+
+   template &lt;FuncInitType&lt;bool,StrLen&gt; FuncInit&gt;
+   auto operator () (FuncInit func_init);
+ };
+
+</pre>
+
+<p>
+Iteration is performed using <b>operator ()</b>. The given functor is called with each record as an argument.
+The generic <a href="page_ApplyToRange.html">functor iteration pattern</a> is used.
+The string is temporary, it must be used inside the functor call.
+If the functor stopped the iteration by the returning <b>false</b>, it may be continued.
+</p>
+
+<h4>SpawnSlot</h4>
+
+<pre>
+
+/* enum SpawnSlotState */
+
+enum <span class="Att">SpawnSlotState</span>
+ {
+  SpawnSlot_Ready,
+  SpawnSlot_Broken,
+  SpawnSlot_Running,
+  SpawnSlot_Stopped
+ };
+
+/* class SpawnSlot */
+
+class <span class="Att">SpawnSlot</span> : NoCopy
+ {
+   ....
+
+  public:
+
+   SpawnSlot() noexcept;
+
+   ~SpawnSlot();
+
+   SpawnSlotState getState() const;
+
+   int wait();
+
+   bool clean();
+ };
+
+</pre>
+
+<p>
+This class is used to wait a child process completion. 
+Once the object of this class is created, it is in the <b>SpawnSlot_Ready</b> state.
+In this state it can be used to spawn a child process with the help of the class <b>SpawnProcess</b> (see <a href="#SpawnProcess">below</a>).
+After that the object state changes to <b>SpawnSlot_Broken</b> or <b>SpawnSlot_Running</b>.
+If the object has the state <b>SpawnSlot_Running</b>, it can be waited either by using the method <b>wait()</b>,
+or by the help of the class <b>SpawnSet</b> (see <a href="#SpawnSet">below</a>).
+The method <b>wait()</b> waits for the child process completion, then returns the process status.
+The object state is changed to the <b>SpawnSlot_Stopped</b>.
+The method <b>clean()</b> can be used to set the state of the object to the <b>SpawnSlot_Ready</b>, 
+unless the state of the object is <b>SpawnSlot_Running</b>. 
+In this case the method does nothing and returns <b>false</b>.
+<b>SpawnSlot</b> destructor generates the error, if the state of the object is <b>SpawnSlot_Running</b>.
+</p>
+
+<h4 id="SpawnSet">SpanSet</h4>
+
+<pre>
+
+class <span class="Att">SpawnSet</span> : NoCopy
+ {
+   ....
+
+  public:
+
+   explicit SpawnSet(ulen reserve);
+
+   ~SpawnSet();
+
+   void add(SpawnSlot *slot);
+
+   struct WaitResult
+    {
+     SpawnSlot *slot;
+     int status;
+    };
+
+   WaitResult wait();
+ };
+
+</pre>
+
+<p>
+This class is designed for waiting of multiple child processes.
+It contains inside an expandable wait list.
+When you construct the object, you set the number of reserved wait slots in the wait list.
+The method <b>add()</b> adds the given <b>SpawnSlot</b> to the wait list.
+The slot must be in the state <b>SpawnSlot_Running</b>.
+After that the slot cannot use it's own method <b>wait()</b>.
+The slot occupies one wait slot. 
+If the wait list cannot be expanded a no-memory exception is thrown.
+Using the initial reservation you may prevent this case.
+Once you fill the list, you can call the method <b>wait()</b>.
+It waits while one of the child processes is finished and returns the result.
+The result consists of the pointer to the slot object and the process status.
+The slot is removed from the wait list and set to the state <b>SpawnSlot_Stopped</b>.
+If the wait list is empty, the pair <b>{0,0}</b> is returned.
+</p>
+
+<h4 id="SpawnProcess">SpawnProcess</h4>
+
+<pre>
+
+class <span class="Att">SpawnProcess</span> : NoCopy
+ {
+   ....
+
+  public:
+
+   explicit SpawnProcess(StrLen exe_name) : SpawnProcess(Empty,exe_name) {}
+
+   SpawnProcess(StrLen wdir,StrLen exe_name);
+
+   ~SpawnProcess();
+
+   void addArg(StrLen str);
+
+   void addArg(ulen reserve,FuncArgType&lt;char *&gt; func);
+
+   void addEnv(StrLen name,StrLen value);
+
+   void addEnv(StrLen str);
+
+   void spawn(SpawnSlot &amp;slot);
+ };
+
+</pre>
+
+<p>
+This class is used to spawn a child process. Before doing this, however, you must fill the object with data.
+</p>
+
+<p>
+The <b>SpawnProcess()</b> constructor have two arguments: <b>wdir</b> and <b>exe_name</b>.
+The first argument if not empty defines the new working directory for the child process.
+The second is used to find the executable file. The file is searched in the <b>PATH</b> list, if required.
+Exact rules to handle it are target-dependent.
+</p>
+
+<p>
+<b>addArg()</b> adds an argument to the process argument list. 
+You may give an exact string or use a second variant.
+In the second variant you give a size to reserve (without trailing null character) and a function.
+This function is called to fill the allocated buffer.
+Trailing null chracter will be added then after reserved characters, but you may include 
+it early in the filling function to produce a shorter string.
+</p>
+
+<p>
+The child process will inherit the parent evironment, but you may add new, or override old variables.
+</p>
+
+<p>
+<b>addEnv(name,value)</b> adds a new (or overrides an old one) variable with the given name and value.
+</p>
+
+<p>
+<b>arrEnv(str)</b> adds the string of kind <b>NAME=VALUE</b>.
+</p>
+
+<p>
+<b>spawn()</b> can be called once to do the job. 
+The process will be bound with the given <b>SpawnSlot</b> object.
+</p>
+
+</body>
+
+</html>
+
+

@@ -1,0 +1,69 @@
+<!--
+/* page_AutoCast.html */
+//----------------------------------------------------------------------------------------
+//
+//  Project: CCore 3.60
+//
+//  License: Boost Software License - Version 1.0 - August 17th, 2003 
+//
+//            see http://www.boost.org/LICENSE_1_0.txt or the local copy
+//
+//  Copyright (c) 2018 Sergey Strukov. All rights reserved.
+//
+//----------------------------------------------------------------------------------------
+-->
+
+<!DOCTYPE html>
+<html>
+
+<head>
+
+ <title>CCore -> AutoCast</title>
+
+ <link href="CCore.css" rel="stylesheet" type="text/css">
+
+</head>
+
+<body>
+
+<h2>AutoCast</h2>
+
+<p class="Files">Files <b>CCore/inc/gadget/AutoCast.h</b> <b>CCore/src/gadget/AutoCast.cpp</b></p>
+
+<p>
+<b>AutoCast</b> helps implicit pointer conversion.
+</p>
+
+<pre>
+
+template &lt;class T&gt;
+class <span class="Att">AutoCast</span>
+ {
+   T *ptr;
+
+  public:
+
+   explicit AutoCast(T *ptr_) : ptr(ptr_) {}
+
+   template &lt;class S&gt;
+   operator S * () const { return static_cast&lt;S *&gt;(ptr); }
+ };
+
+</pre>
+
+<p>
+It can be used for implicit pointer conversion:
+</p>
+
+<pre>
+
+T *ptr = .... ;
+
+S *dst = AutoCast(ptr) ; // requires static_cast&lt;S *&gt;(T *)
+
+</pre>
+
+</body>
+
+</html>
+

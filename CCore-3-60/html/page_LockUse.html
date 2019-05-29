@@ -1,0 +1,77 @@
+<!--
+/* page_LockUse.html */
+//----------------------------------------------------------------------------------------
+//
+//  Project: CCore 3.60
+//
+//  License: Boost Software License - Version 1.0 - August 17th, 2003 
+//
+//            see http://www.boost.org/LICENSE_1_0.txt or the local copy
+//
+//  Copyright (c) 2018 Sergey Strukov. All rights reserved.
+//
+//----------------------------------------------------------------------------------------
+-->
+
+<!DOCTYPE html>
+<html>
+
+<head>
+
+ <title>CCore -> LockUse</title>
+
+ <link href="CCore.css" rel="stylesheet" type="text/css">
+
+</head>
+
+<body>
+
+<h2>LockUse</h2>
+
+<p class="Files">Files <b>CCore/inc/gadget/LockUse.h</b> <b>CCore/src/gadget/LockUse.cpp</b></p>
+
+<p>
+<b>LockUse</b> is used to limit usage of some resource. It works with some usage counter.
+</p>
+
+<pre>
+
+template &lt;UIntType UInt&gt;
+class <span class="Att">LockUse</span> : NoCopy
+ {
+   UInt &amp;count;
+
+  public:
+
+   explicit LockUse(UInt &amp;count_) : count(count_) { if( !count_ ) GuardUseLocked(); count_--; }
+
+   ~LockUse() { count++; }
+ };
+
+</pre>
+
+<p>
+If the counter is zero then attempt to lock it cause an exception.
+Otherwise the counter is decremented and incremented in the destructor.
+This class is useful to guard recursive calls.
+</p>
+
+<pre>
+
+unsigned count = 10 ; 
+
+{
+ // no more count locks in the scope
+
+ LockUse lock(count)
+
+ ....
+
+}
+
+</pre>
+
+</body>
+
+</html>
+
