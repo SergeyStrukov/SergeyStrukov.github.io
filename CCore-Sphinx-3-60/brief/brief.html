@@ -1,0 +1,1213 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>CCore brief &#8212; CCore  documentation</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Sphinx test" href="../test/test.html" />
+    <link rel="prev" title="Welcome to CCore documentation!" href="../index.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../test/test.html" title="Sphinx test"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="../index.html" title="Welcome to CCore documentation!"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">CCore  documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="ccore-brief">
+<h1>CCore brief<a class="headerlink" href="#ccore-brief" title="Permalink to this headline">¶</a></h1>
+<p>Many years ago I had started this project … <a class="reference internal" href="#to-ab-ovo"><span class="std std-ref">Ab ovo</span></a></p>
+<p><strong>CCore</strong> uses an advanced memory manager … <a class="reference internal" href="#to-heap"><span class="std std-ref">Heap</span></a></p>
+<p><strong>CCore</strong> provides <cite>Printf()</cite> print facility … <a class="reference internal" href="#to-printf"><span class="std std-ref">Printf()</span></a></p>
+<p><strong>CCore</strong> uses an advanced exception handling pattern … <a class="reference internal" href="#to-exception"><span class="std std-ref">Exceptions</span></a></p>
+<p>One of the most useful invention, implemented in <strong>CCore</strong>, is <strong>DDL</strong> … <a class="reference internal" href="#to-ddl"><span class="std std-ref">DDL</span></a></p>
+<p><strong>CCore</strong> provides an advanced synchronization basis … <a class="reference internal" href="#to-sync"><span class="std std-ref">Synchronization</span></a></p>
+<p><strong>CCore</strong> implements the <strong>Packets</strong> – infrastructure for the mass asynchonous request processing … <a class="reference internal" href="#to-packets"><span class="std std-ref">Packets</span></a></p>
+<p><strong>CCore</strong> contains number of new network protocols and components … <a class="reference internal" href="#to-net"><span class="std std-ref">Networking</span></a></p>
+<p>and much more …</p>
+<p><strong>CCore</strong> source contains many advanced C++ tricks, based on the latest C++ language features.
+No way I can describe all of them in this <em>brief notes</em>.
+So put your hands on …</p>
+<div class="section" id="ab-ovo">
+<span id="to-ab-ovo"></span><h2>Ab ovo<a class="headerlink" href="#ab-ovo" title="Permalink to this headline">¶</a></h2>
+<p>Initially I had created a small real-time bare-metal core, mostly for experimental purpose.
+It was a kind of back-up for small tasks, where using a full-scale commercial RTS was too much expensive.
+But the core was well-made, and I decided continue development up to some extent.
+Eventually, this project become a solid platform, well suited for wide range of tasks, both host and embedded.
+I had a solid experience in software development (including embedded one) and I had a good vision, what do I want
+from a proper development platform. So far none of existing gives me even a fraction of what I want.
+So I am lovely developing <strong>CCore</strong> and use it for software development.</p>
+<p>The main goal of <strong>CCore</strong> was to bring the fully-featured <strong>C++</strong> to the embedded development.
+Up to present time there ara many projects, written on pure <strong>C</strong>.
+This is really weird situation.
+<strong>C</strong> is a primitive language, not suited for large scale projects, the practical ceil of <strong>C</strong> is 10000 LOC.
+Everything above this size must not be developed on pure <strong>C</strong>.
+In fact, <strong>C</strong> became a toxic language, polluting the software world.
+So <strong>CCore</strong> gives a better alternative.
+It is not only opens the door for <strong>C++</strong>, but provides well suited library support.
+In times <strong>CCore</strong> was started the standard <strong>C++</strong> library was not develop well enough.
+For example, you could not put a non-copyrable object in the <cite>vector</cite>.
+Many important things, large or small, required for the professional development, are still missing in the standard library up to present.</p>
+<p>One of the shameful lack in the modern <strong>C++</strong> standard library is the absence of well developed printing tools.
+There are two options: the old-school <strong>C</strong> <strong>stdio</strong> and the <strong>C++</strong> <strong>iostream</strong>.
+Both are crap.
+The first is not type-safe and type-driven, neither type-extendable.
+In <strong>iostream</strong> format options are included in the stream object.
+This is a principal architectural mistake.
+The printing streams itself are hard-to-use.
+Compare:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">Printf</span><span class="p">(</span><span class="n">Con</span><span class="p">,</span><span class="s">&quot;#8.16i;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="mi">12345</span><span class="p">);</span>
+
+<span class="n">Printf</span><span class="p">(</span><span class="n">Con</span><span class="p">,</span><span class="s">&quot;#;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="mi">67890</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>and:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">hex</span> <span class="o">&lt;&lt;</span> <span class="n">setw</span><span class="p">(</span><span class="mi">8</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">setiosflags</span><span class="p">(</span><span class="n">ios</span><span class="o">::</span><span class="n">internal</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">setfill</span><span class="p">(</span><span class="sc">&#39;0&#39;</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="mi">12345</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span>
+     <span class="o">&lt;&lt;</span> <span class="n">dec</span> <span class="o">&lt;&lt;</span> <span class="n">setiosflags</span><span class="p">(</span><span class="n">ios</span><span class="o">::</span><span class="n">right</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">setfill</span><span class="p">(</span><span class="sc">&#39; &#39;</span><span class="p">)</span> <span class="p">;</span> <span class="c1">// reset format flags</span>
+
+<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="mi">67890</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span> <span class="p">;</span>
+</pre></div>
+</div>
+<p>So <strong>CCore</strong> includes its own printing subsystem, much more practical.</p>
+<p>Both <strong>C</strong> and <strong>C++</strong> provides a support for the dynamic memory allocation.
+Unfortunately, this support lacks some important features.
+What do I need from the heap?</p>
+<ol class="arabic simple">
+<li><p>First, speed and real-time properties for embedded systems.</p></li>
+<li><p>Internal integrity check.</p></li>
+<li><p>Memory block extension and shrinking.</p></li>
+<li><p>Statistic counting.</p></li>
+</ol>
+<p>So I included in <strong>CCore</strong> such a heap feature.</p>
+<p>Usually embedded systems havily use networks for various purposes.
+That’s why a good support for network applications is required.
+<strong>CCore</strong> includes implementation of a proper infrastructre for that
+as well as an implementation of a set of new network protocols.</p>
+<p>The latest big extension of <strong>CCore</strong> is a GUI development support.
+This part is almost finalized, but not yet documented.</p>
+<img alt="../_images/Prime.png" src="../_images/Prime.png" />
+<img alt="../_images/Contour.png" src="../_images/Contour.png" />
+<img alt="../_images/SubLab.png" src="../_images/SubLab.png" />
+</div>
+<div class="section" id="heap">
+<span id="to-heap"></span><h2>Heap<a class="headerlink" href="#heap" title="Permalink to this headline">¶</a></h2>
+<p><strong>CCore</strong> heap has the following features:</p>
+<ol class="arabic">
+<li><p>Best fit.</p>
+<blockquote>
+<div><p>Heap selects a smallest available block of memory to satisfy an allocation request.</p>
+</div></blockquote>
+</li>
+<li><p>Fast, with real-time properties.</p></li>
+<li><p>Integrity check.</p>
+<blockquote>
+<div><p>If you try to use an invalid pointer as a heap function argument, it will be higly likely detected and abort will be called.</p>
+</div></blockquote>
+</li>
+<li><p>Extended interface.</p>
+<p>Here is a list of heap functions:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span> <span class="o">*</span> <span class="nf">TryMemAlloc</span><span class="p">(</span><span class="n">ulen</span> <span class="n">len</span><span class="p">)</span> <span class="n">noexcept</span><span class="p">;</span>
+
+<span class="kt">void</span> <span class="o">*</span> <span class="nf">MemAlloc</span><span class="p">(</span><span class="n">ulen</span> <span class="n">len</span><span class="p">);</span>
+
+<span class="n">ulen</span> <span class="nf">MemLen</span><span class="p">(</span><span class="k">const</span> <span class="kt">void</span> <span class="o">*</span><span class="n">mem</span><span class="p">);</span>       <span class="c1">// mem may == 0</span>
+
+<span class="kt">bool</span> <span class="nf">MemExtend</span><span class="p">(</span><span class="kt">void</span> <span class="o">*</span><span class="n">mem</span><span class="p">,</span><span class="n">ulen</span> <span class="n">len</span><span class="p">);</span> <span class="c1">// mem may == 0</span>
+
+<span class="kt">bool</span> <span class="nf">MemShrink</span><span class="p">(</span><span class="kt">void</span> <span class="o">*</span><span class="n">mem</span><span class="p">,</span><span class="n">ulen</span> <span class="n">len</span><span class="p">);</span> <span class="c1">// mem may == 0</span>
+
+<span class="kt">void</span> <span class="nf">MemFree</span><span class="p">(</span><span class="kt">void</span> <span class="o">*</span><span class="n">mem</span><span class="p">);</span>            <span class="c1">// mem may == 0</span>
+
+<span class="kt">void</span> <span class="nf">MemLim</span><span class="p">(</span><span class="n">ulen</span> <span class="n">limit</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>You can not only allocate and deallocate blocks of memory, but you can resize them in place (if possible).
+This is useful in the building of resizable arrays and other containers.</p>
+<p>You can also set a memory allocation limit.
+This feature is useful for testing.</p>
+<p>Heap has also some statistic functions, this allow to watch over the memory usage.</p>
+</li>
+</ol>
+<p>These features are highly valuable in any kind of software development.</p>
+</div>
+<div class="section" id="printf">
+<span id="to-printf"></span><h2><cite>Printf()</cite><a class="headerlink" href="#printf" title="Permalink to this headline">¶</a></h2>
+<p><cite>Printf()</cite> is similar to the <strong>C</strong> <cite>printf()</cite>.
+It works as the following:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">int</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">12345</span> <span class="p">;</span>
+
+<span class="n">Printf</span><span class="p">(</span><span class="n">Con</span><span class="p">,</span><span class="s">&quot;x = #;</span><span class="se">\n\n</span><span class="s">&quot;</span><span class="p">,</span><span class="n">x</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>The first argument is a <em>printer</em> object. In this case it is the console.
+The second is a format string. By tradition it is a null terminated string.
+After the format string an arbitrary number of arguments of any <em>printable</em> types may follow.
+They will be printed in places of format stems.
+Each format stem is a sequence like <cite>“#…;”</cite>.
+Between the starting <cite>‘#’</cite> symbol and the ending <cite>‘;’</cite> symbol options my be specified:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">Printf</span><span class="p">(</span><span class="n">Con</span><span class="p">,</span><span class="s">&quot;--- #10l; ---</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="mi">12345</span><span class="p">);</span>
+<span class="n">Printf</span><span class="p">(</span><span class="n">Con</span><span class="p">,</span><span class="s">&quot;--- #10i; ---</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="mi">12345</span><span class="p">);</span>
+<span class="n">Printf</span><span class="p">(</span><span class="n">Con</span><span class="p">,</span><span class="s">&quot;--- #10r; ---</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="mi">12345</span><span class="p">);</span>
+<span class="n">Printf</span><span class="p">(</span><span class="n">Con</span><span class="p">,</span><span class="s">&quot;--- #+10.5l; ---</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="mi">12345</span><span class="p">);</span>
+<span class="n">Printf</span><span class="p">(</span><span class="n">Con</span><span class="p">,</span><span class="s">&quot;--- #+10.hi; ---</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="mi">12345</span><span class="p">);</span>
+<span class="n">Printf</span><span class="p">(</span><span class="n">Con</span><span class="p">,</span><span class="s">&quot;--- #10.hi; ---</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="o">-</span><span class="mi">12345</span><span class="p">);</span>
+
+<span class="n">Printf</span><span class="p">(</span><span class="n">Con</span><span class="p">,</span><span class="s">&quot;--- #10.f2l; ---</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="mi">12345</span><span class="p">);</span>
+<span class="n">Printf</span><span class="p">(</span><span class="n">Con</span><span class="p">,</span><span class="s">&quot;--- #10.f2i; ---</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="mi">12345</span><span class="p">);</span>
+<span class="n">Printf</span><span class="p">(</span><span class="n">Con</span><span class="p">,</span><span class="s">&quot;--- #10.f2r; ---</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="mi">12345</span><span class="p">);</span>
+
+<span class="n">Printf</span><span class="p">(</span><span class="n">Con</span><span class="p">,</span><span class="s">&quot;--- #10.f2l; ---</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="o">-</span><span class="mi">12345</span><span class="p">);</span>
+<span class="n">Printf</span><span class="p">(</span><span class="n">Con</span><span class="p">,</span><span class="s">&quot;--- #10.f2i; ---</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="o">-</span><span class="mi">12345</span><span class="p">);</span>
+<span class="n">Printf</span><span class="p">(</span><span class="n">Con</span><span class="p">,</span><span class="s">&quot;--- #10.f2r; ---</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="o">-</span><span class="mi">12345</span><span class="p">);</span>
+
+<span class="n">Printf</span><span class="p">(</span><span class="n">Con</span><span class="p">,</span><span class="s">&quot;--- #10.f2l; ---</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="o">-</span><span class="mi">12</span><span class="p">);</span>
+<span class="n">Printf</span><span class="p">(</span><span class="n">Con</span><span class="p">,</span><span class="s">&quot;--- #10.f2i; ---</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="o">-</span><span class="mi">12</span><span class="p">);</span>
+<span class="n">Printf</span><span class="p">(</span><span class="n">Con</span><span class="p">,</span><span class="s">&quot;--- #10.f2r; ---</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="o">-</span><span class="mi">12</span><span class="p">);</span>
+
+<span class="n">Printf</span><span class="p">(</span><span class="n">Con</span><span class="p">,</span><span class="s">&quot;--- #10.f4l; ---</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="mi">12</span><span class="p">);</span>
+<span class="n">Printf</span><span class="p">(</span><span class="n">Con</span><span class="p">,</span><span class="s">&quot;--- #10.f4i; ---</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="mi">12</span><span class="p">);</span>
+<span class="n">Printf</span><span class="p">(</span><span class="n">Con</span><span class="p">,</span><span class="s">&quot;--- #10.f4r; ---</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="mi">12</span><span class="p">);</span>
+
+<span class="n">Printf</span><span class="p">(</span><span class="n">Con</span><span class="p">,</span><span class="s">&quot;--- #10.f2l; ---</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="mi">0</span><span class="p">);</span>
+<span class="n">Printf</span><span class="p">(</span><span class="n">Con</span><span class="p">,</span><span class="s">&quot;--- #10.f2i; ---</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="mi">0</span><span class="p">);</span>
+<span class="n">Printf</span><span class="p">(</span><span class="n">Con</span><span class="p">,</span><span class="s">&quot;--- #10.f2r; ---</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="mi">0</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>and the output is:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="o">---</span> <span class="mi">12345</span>      <span class="o">---</span>
+<span class="o">---</span> <span class="mo">0000012345</span> <span class="o">---</span>
+<span class="o">---</span>      <span class="mi">12345</span> <span class="o">---</span>
+<span class="o">---</span> <span class="o">+</span><span class="mi">343340</span>    <span class="o">---</span>
+<span class="o">---</span> <span class="o">+</span><span class="mo">0000303</span><span class="mi">9</span><span class="n">h</span> <span class="o">---</span>
+<span class="o">---</span> <span class="o">-</span><span class="mo">0000303</span><span class="mi">9</span><span class="n">h</span> <span class="o">---</span>
+<span class="o">---</span> <span class="mf">123.45</span>     <span class="o">---</span>
+<span class="o">---</span> <span class="mf">0000123.45</span> <span class="o">---</span>
+<span class="o">---</span>     <span class="mf">123.45</span> <span class="o">---</span>
+<span class="o">---</span> <span class="o">-</span><span class="mf">123.45</span>    <span class="o">---</span>
+<span class="o">---</span> <span class="o">-</span><span class="mf">000123.45</span> <span class="o">---</span>
+<span class="o">---</span>    <span class="o">-</span><span class="mf">123.45</span> <span class="o">---</span>
+<span class="o">---</span> <span class="o">-</span><span class="mf">0.12</span>      <span class="o">---</span>
+<span class="o">---</span> <span class="o">-</span><span class="mf">000000.12</span> <span class="o">---</span>
+<span class="o">---</span>      <span class="o">-</span><span class="mf">0.12</span> <span class="o">---</span>
+<span class="o">---</span> <span class="mf">0.0012</span>     <span class="o">---</span>
+<span class="o">---</span> <span class="mf">00000.0012</span> <span class="o">---</span>
+<span class="o">---</span>     <span class="mf">0.0012</span> <span class="o">---</span>
+<span class="o">---</span> <span class="mf">0.00</span>       <span class="o">---</span>
+<span class="o">---</span> <span class="mf">0000000.00</span> <span class="o">---</span>
+<span class="o">---</span>       <span class="mf">0.00</span> <span class="o">---</span>
+</pre></div>
+</div>
+<p><cite>Printf()</cite> ties together a printer object, a format string and printable objects.
+You can easily develope these kind of objects to match your particular needs.</p>
+<div class="section" id="printer-class">
+<h3>Printer class<a class="headerlink" href="#printer-class" title="Permalink to this headline">¶</a></h3>
+<p>In general, to make a class a printer you have to define the following class elements:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">class</span> <span class="n">PrintToSomething</span>
+ <span class="p">{</span>
+  <span class="nl">public</span><span class="p">:</span>
+
+   <span class="n">using</span> <span class="n">PrintOutType</span> <span class="o">=</span> <span class="n">PrintToSomething</span> <span class="o">&amp;</span> <span class="p">;</span>
+
+   <span class="n">PrintOutType</span> <span class="nf">printRef</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="o">*</span><span class="n">this</span><span class="p">;</span> <span class="p">}</span>
+
+   <span class="kt">void</span> <span class="nf">put</span><span class="p">(</span><span class="kt">char</span> <span class="n">ch</span><span class="p">);</span>
+
+   <span class="kt">void</span> <span class="nf">put</span><span class="p">(</span><span class="kt">char</span> <span class="n">ch</span><span class="p">,</span><span class="n">ulen</span> <span class="n">len</span><span class="p">);</span>
+
+   <span class="kt">void</span> <span class="nf">put</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">str</span><span class="p">,</span><span class="n">ulen</span> <span class="n">len</span><span class="p">);</span>
+
+   <span class="kt">void</span> <span class="nf">flush</span><span class="p">();</span>
+ <span class="p">};</span>
+</pre></div>
+</div>
+<p>In most cases, however, it’s better to inherit from the following base class for printer types:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">class</span> <span class="nl">PrintBase</span> <span class="p">:</span> <span class="n">NoCopy</span>
+ <span class="p">{</span>
+   <span class="p">....</span>
+
+   <span class="n">virtual</span> <span class="n">PtrLen</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;</span> <span class="n">do_provide</span><span class="p">(</span><span class="n">ulen</span> <span class="n">hint_len</span><span class="p">)</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+
+   <span class="n">virtual</span> <span class="kt">void</span> <span class="nf">do_flush</span><span class="p">(</span><span class="kt">char</span> <span class="o">*</span><span class="n">ptr</span><span class="p">,</span><span class="n">ulen</span> <span class="n">len</span><span class="p">)</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+
+  <span class="nl">public</span><span class="p">:</span>
+
+   <span class="n">using</span> <span class="n">PrintOutType</span> <span class="o">=</span> <span class="n">PrintBase</span> <span class="o">&amp;</span> <span class="p">;</span>
+
+   <span class="n">PrintOutType</span> <span class="nf">printRef</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="o">*</span><span class="n">this</span><span class="p">;</span> <span class="p">}</span>
+
+   <span class="c1">// constructors</span>
+
+   <span class="n">PrintBase</span><span class="p">();</span>
+
+   <span class="o">~</span><span class="n">PrintBase</span><span class="p">();</span>
+
+   <span class="c1">// methods</span>
+
+   <span class="p">....</span>
+ <span class="p">};</span>
+</pre></div>
+</div>
+<p>You have to implement two virtual functions in a derived class to output printed characters to whatever you want.</p>
+</div>
+<div class="section" id="printable-types">
+<h3>Printable types<a class="headerlink" href="#printable-types" title="Permalink to this headline">¶</a></h3>
+<p>Making a type printable is simple like this:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">struct</span> <span class="n">IntPoint</span>
+ <span class="p">{</span>
+  <span class="kt">int</span> <span class="n">x</span><span class="p">;</span>
+  <span class="kt">int</span> <span class="n">y</span><span class="p">;</span>
+
+  <span class="p">....</span>
+
+  <span class="c1">// print object</span>
+
+  <span class="kt">void</span> <span class="n">print</span><span class="p">(</span><span class="n">PrinterType</span> <span class="o">&amp;</span><span class="n">out</span><span class="p">)</span> <span class="k">const</span>
+   <span class="p">{</span>
+    <span class="n">Printf</span><span class="p">(</span><span class="n">out</span><span class="p">,</span><span class="s">&quot;(#;,#;)&quot;</span><span class="p">,</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">);</span>
+   <span class="p">}</span>
+ <span class="p">};</span>
+</pre></div>
+</div>
+<p>OR, if you need a printing options, like this:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">struct</span> <span class="n">PrintDumpOptType</span>
+ <span class="p">{</span>
+  <span class="p">....</span>
+
+  <span class="kt">void</span> <span class="n">setDefault</span><span class="p">();</span>
+
+  <span class="n">PrintDumpOptType</span><span class="p">()</span> <span class="p">{</span> <span class="n">setDefault</span><span class="p">();</span> <span class="p">}</span>
+
+  <span class="n">PrintDumpOptType</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">ptr</span><span class="p">,</span><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">lim</span><span class="p">);</span>
+
+  <span class="c1">//</span>
+  <span class="c1">// [width=0][.line_len=16]</span>
+  <span class="c1">//</span>
+ <span class="p">};</span>
+
+<span class="n">template</span> <span class="o">&lt;</span><span class="n">UIntType</span> <span class="n">UInt</span><span class="o">&gt;</span>
+<span class="n">class</span> <span class="n">PrintDump</span>
+ <span class="p">{</span>
+   <span class="n">PtrLen</span><span class="o">&lt;</span><span class="k">const</span> <span class="n">UInt</span><span class="o">&gt;</span> <span class="n">data</span><span class="p">;</span>
+
+  <span class="nl">public</span><span class="p">:</span>
+
+   <span class="p">....</span>
+
+   <span class="n">using</span> <span class="n">PrintOptType</span> <span class="o">=</span> <span class="n">PrintDumpOptType</span> <span class="p">;</span>
+
+   <span class="kt">void</span> <span class="nf">print</span><span class="p">(</span><span class="n">PrinterType</span> <span class="o">&amp;</span><span class="n">out</span><span class="p">,</span><span class="n">PrintOptType</span> <span class="n">opt</span><span class="p">)</span> <span class="k">const</span><span class="p">;</span>
+ <span class="p">};</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="exceptions">
+<span id="to-exception"></span><h2>Exceptions<a class="headerlink" href="#exceptions" title="Permalink to this headline">¶</a></h2>
+<p><strong>CCore</strong> uses the special pattern to throw and catch exceptions:</p>
+<ol class="arabic">
+<li><p>All exception are of type <cite>CatchType</cite>, which is an empty structure:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">try</span>
+  <span class="p">{</span>
+   <span class="p">....</span>
+  <span class="p">}</span>
+<span class="n">catch</span><span class="p">(</span><span class="n">CatchType</span><span class="p">)</span>
+  <span class="p">{</span>
+  <span class="p">}</span>
+</pre></div>
+</div>
+</li>
+<li><p>To get exception notifications you have to define a special object:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">try</span>
+  <span class="p">{</span>
+   <span class="n">ReportException</span> <span class="n">report</span><span class="p">;</span>
+
+   <span class="p">....</span>
+  <span class="p">}</span>
+<span class="n">catch</span><span class="p">(</span><span class="n">CatchType</span><span class="p">)</span>
+  <span class="p">{</span>
+  <span class="p">}</span>
+</pre></div>
+</div>
+</li>
+<li><p>To react on <cite>no-exceptions</cite> you have to call the special method <cite>guard()</cite>:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">try</span>
+  <span class="p">{</span>
+   <span class="n">ReportException</span> <span class="n">report</span><span class="p">;</span>
+
+   <span class="p">{</span>
+    <span class="p">....</span>
+   <span class="p">}</span>
+
+   <span class="n">report</span><span class="p">.</span><span class="n">guard</span><span class="p">();</span>
+  <span class="p">}</span>
+<span class="n">catch</span><span class="p">(</span><span class="n">CatchType</span><span class="p">)</span>
+  <span class="p">{</span>
+  <span class="p">}</span>
+</pre></div>
+</div>
+</li>
+<li><p>To throw an exception use the function <cite>Printf()</cite>:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">Printf</span><span class="p">(</span><span class="n">Exception</span><span class="p">,</span><span class="s">&quot;Shit happened&quot;</span><span class="p">);</span>
+
+  <span class="c1">// exception will be thrown by this call</span>
+</pre></div>
+</div>
+<p>OR:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">Printf</span><span class="p">(</span><span class="n">NoException</span><span class="p">,</span><span class="s">&quot;Shit happened, but we continue ...&quot;</span><span class="p">);</span>
+
+  <span class="c1">// no exception will be thrown by this call</span>
+</pre></div>
+</div>
+</li>
+<li><p>Event if you don’t throw an exception, <cite>report</cite> object gets the exception text ans sets an internal flag.
+So later, when you call <cite>report.guard()</cite> an exception will be eventually thown.</p></li>
+</ol>
+<p>Using this pattern you can safely handle exceptional situations in class destructors:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">PrintFile</span><span class="o">::~</span><span class="n">PrintFile</span><span class="p">()</span>
+ <span class="p">{</span>
+  <span class="k">if</span><span class="p">(</span> <span class="n">isOpened</span><span class="p">()</span> <span class="p">)</span>
+    <span class="p">{</span>
+     <span class="n">FileMultiError</span> <span class="n">errout</span><span class="p">;</span>
+
+     <span class="n">soft_close</span><span class="p">(</span><span class="n">errout</span><span class="p">);</span>
+
+     <span class="k">if</span><span class="p">(</span> <span class="o">+</span><span class="n">errout</span> <span class="p">)</span>
+       <span class="p">{</span>
+        <span class="n">Printf</span><span class="p">(</span><span class="n">NoException</span><span class="p">,</span><span class="s">&quot;CCore::PrintFile::~PrintFile() : #;&quot;</span><span class="p">,</span><span class="n">errout</span><span class="p">);</span>
+       <span class="p">}</span>
+    <span class="p">}</span>
+ <span class="p">}</span>
+</pre></div>
+</div>
+<p>No one glitch will be forgotten!</p>
+</div>
+<div class="section" id="ddl">
+<span id="to-ddl"></span><h2>DDL<a class="headerlink" href="#ddl" title="Permalink to this headline">¶</a></h2>
+<p><strong>DDL</strong> expands as “Data Definition Language”.
+This is a textual language for representation of data.
+<strong>DDL</strong> files looks like:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">type</span> <span class="n">Bool</span> <span class="o">=</span> <span class="n">uint8</span> <span class="p">;</span>
+
+<span class="n">Bool</span> <span class="n">True</span> <span class="o">=</span> <span class="mi">1</span> <span class="p">;</span>
+<span class="n">Bool</span> <span class="n">False</span> <span class="o">=</span> <span class="mi">0</span> <span class="p">;</span>
+
+<span class="k">struct</span> <span class="n">FavElement</span>
+ <span class="p">{</span>
+  <span class="n">text</span> <span class="n">title</span><span class="p">;</span>
+  <span class="n">text</span> <span class="n">path</span><span class="p">;</span>
+  <span class="n">Bool</span> <span class="n">section</span> <span class="o">=</span> <span class="n">False</span> <span class="p">;</span>
+  <span class="n">Bool</span> <span class="n">open</span> <span class="o">=</span> <span class="n">True</span> <span class="p">;</span>
+ <span class="p">};</span>
+
+<span class="k">struct</span> <span class="n">FavData</span>
+ <span class="p">{</span>
+  <span class="n">FavElement</span><span class="p">[]</span> <span class="n">list</span><span class="p">;</span>
+
+  <span class="n">ulen</span> <span class="n">off</span> <span class="o">=</span> <span class="mi">0</span> <span class="p">;</span>
+  <span class="n">ulen</span> <span class="n">cur</span> <span class="o">=</span> <span class="mi">0</span> <span class="p">;</span>
+ <span class="p">};</span>
+</pre></div>
+</div>
+<p>and like this:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="c1">//include &lt;FavData.ddl&gt;</span>
+
+<span class="n">FavData</span> <span class="n">Data</span> <span class="o">=</span>
+ <span class="p">{</span>
+
+  <span class="p">{</span>
+   <span class="p">{</span> <span class="s">&quot;CCore&quot;</span> <span class="p">,</span> <span class="s">&quot;&quot;</span> <span class="p">,</span> <span class="n">True</span> <span class="p">,</span> <span class="n">True</span> <span class="p">},</span>
+   <span class="p">{</span> <span class="s">&quot;CCore 3-xx&quot;</span> <span class="p">,</span> <span class="s">&quot;D:/active/home/C++/CCore-3-xx/book/CCore.book.vol&quot;</span> <span class="p">,</span> <span class="n">False</span> <span class="p">,</span> <span class="n">True</span> <span class="p">},</span>
+   <span class="p">{</span> <span class="s">&quot;Sample&quot;</span> <span class="p">,</span> <span class="s">&quot;&quot;</span> <span class="p">,</span> <span class="n">True</span> <span class="p">,</span> <span class="n">False</span> <span class="p">},</span>
+   <span class="p">{</span> <span class="s">&quot;CCore 3-xx&quot;</span> <span class="p">,</span> <span class="s">&quot;D:/active/home/C++/CCore-3-xx/book/sample/CCore.book.ddl&quot;</span> <span class="p">,</span> <span class="n">False</span> <span class="p">,</span> <span class="n">False</span> <span class="p">}</span>
+  <span class="p">},</span>
+
+  <span class="mi">0</span><span class="p">,</span>
+  <span class="mi">1</span>
+ <span class="p">};</span>
+</pre></div>
+</div>
+<p>You can find the complete description <a class="reference external" href="https://github.com/SergeyStrukov/CCore-3-xx/blob/master/doc/DDL.pdf">here</a>.
+<strong>DDL</strong> is</p>
+<ol class="arabic simple">
+<li><p><strong>C</strong>-style,</p></li>
+<li><p>typed,</p></li>
+<li><p>commutative,</p></li>
+<li><p>flexible,</p></li>
+<li><p>polymorphe,</p></li>
+<li><p>simple.</p></li>
+</ol>
+<p>It can be conveniently used for representation of any kind of data with any level of internal connectivity.
+For example, this types are used to reprersent context-free grammars and LR1 state machines:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">type</span> <span class="n">AtomIndex</span> <span class="o">=</span> <span class="n">uint32</span> <span class="p">;</span>
+<span class="n">type</span> <span class="n">SyntIndex</span> <span class="o">=</span> <span class="n">uint32</span> <span class="p">;</span>
+<span class="n">type</span> <span class="n">KindIndex</span> <span class="o">=</span> <span class="n">uint32</span> <span class="p">;</span>
+<span class="n">type</span> <span class="n">ElementIndex</span> <span class="o">=</span> <span class="n">uint32</span> <span class="p">;</span>
+<span class="n">type</span> <span class="n">RuleIndex</span> <span class="o">=</span> <span class="n">uint32</span> <span class="p">;</span>
+<span class="n">type</span> <span class="n">StateIndex</span> <span class="o">=</span> <span class="n">uint32</span> <span class="p">;</span>
+<span class="n">type</span> <span class="n">FinalIndex</span> <span class="o">=</span> <span class="n">uint32</span> <span class="p">;</span>
+
+<span class="k">struct</span> <span class="n">Lang</span>
+ <span class="p">{</span>
+  <span class="n">Atom</span><span class="p">[]</span> <span class="n">atoms</span><span class="p">;</span>
+  <span class="n">Synt</span><span class="p">[]</span> <span class="n">synts</span><span class="p">;</span>
+  <span class="n">Synt</span> <span class="o">*</span> <span class="p">[]</span> <span class="n">lang</span><span class="p">;</span>
+  <span class="n">Element</span><span class="p">[]</span> <span class="n">elements</span><span class="p">;</span>
+  <span class="n">Rule</span><span class="p">[]</span> <span class="n">rules</span><span class="p">;</span>
+  <span class="n">TopRule</span><span class="p">[]</span> <span class="n">top_rules</span><span class="p">;</span>
+  <span class="n">State</span><span class="p">[]</span> <span class="n">states</span><span class="p">;</span>
+  <span class="n">Final</span><span class="p">[]</span> <span class="n">finals</span><span class="p">;</span>
+ <span class="p">};</span>
+
+<span class="k">struct</span> <span class="n">Atom</span>
+ <span class="p">{</span>
+  <span class="n">AtomIndex</span> <span class="n">index</span><span class="p">;</span>
+  <span class="n">text</span> <span class="n">name</span><span class="p">;</span>
+
+  <span class="n">Element</span> <span class="o">*</span><span class="n">element</span><span class="p">;</span>
+ <span class="p">};</span>
+
+<span class="k">struct</span> <span class="n">Synt</span>
+ <span class="p">{</span>
+  <span class="n">SyntIndex</span> <span class="n">index</span><span class="p">;</span>
+  <span class="n">text</span> <span class="n">name</span><span class="p">;</span>
+
+  <span class="n">Kind</span><span class="p">[]</span> <span class="n">kinds</span><span class="p">;</span>
+  <span class="n">Rule</span> <span class="o">*</span> <span class="p">[]</span> <span class="n">rules</span><span class="p">;</span>
+ <span class="p">};</span>
+
+<span class="k">struct</span> <span class="n">Kind</span>
+ <span class="p">{</span>
+  <span class="n">KindIndex</span> <span class="n">kindex</span><span class="p">;</span> <span class="c1">// index among all kinds</span>
+  <span class="n">KindIndex</span> <span class="n">index</span><span class="p">;</span> <span class="c1">// index in synt array</span>
+  <span class="n">text</span> <span class="n">name</span><span class="p">;</span>
+
+  <span class="n">Synt</span> <span class="o">*</span><span class="n">synt</span><span class="p">;</span>
+
+  <span class="n">Element</span> <span class="o">*</span><span class="n">element</span><span class="p">;</span>
+
+  <span class="n">TopRule</span> <span class="o">*</span> <span class="p">[]</span> <span class="n">rules</span><span class="p">;</span>
+ <span class="p">};</span>
+
+<span class="k">struct</span> <span class="n">Element</span>
+ <span class="p">{</span>
+  <span class="n">ElementIndex</span> <span class="n">index</span><span class="p">;</span>
+
+  <span class="p">{</span><span class="n">Atom</span><span class="p">,</span><span class="n">Kind</span><span class="p">}</span> <span class="o">*</span> <span class="n">elem</span><span class="p">;</span>
+ <span class="p">};</span>
+
+<span class="k">struct</span> <span class="n">Rule</span>
+ <span class="p">{</span>
+  <span class="n">RuleIndex</span> <span class="n">index</span><span class="p">;</span>
+  <span class="n">text</span> <span class="n">name</span><span class="p">;</span>
+
+  <span class="n">Kind</span> <span class="o">*</span><span class="n">result</span><span class="p">;</span>
+
+  <span class="n">type</span> <span class="n">Arg</span> <span class="o">=</span> <span class="p">{</span><span class="n">Atom</span><span class="p">,</span><span class="n">Synt</span><span class="p">}</span> <span class="o">*</span> <span class="p">;</span>
+
+  <span class="n">Arg</span><span class="p">[]</span> <span class="n">args</span><span class="p">;</span>
+ <span class="p">};</span>
+
+<span class="k">struct</span> <span class="n">TopRule</span>
+ <span class="p">{</span>
+  <span class="n">RuleIndex</span> <span class="n">index</span><span class="p">;</span>
+  <span class="n">text</span> <span class="n">name</span><span class="p">;</span>
+
+  <span class="n">Rule</span> <span class="o">*</span><span class="n">bottom</span><span class="p">;</span>
+
+  <span class="n">Kind</span> <span class="o">*</span><span class="n">result</span><span class="p">;</span>
+
+  <span class="n">type</span> <span class="n">Arg</span> <span class="o">=</span> <span class="p">{</span><span class="n">Atom</span><span class="p">,</span><span class="n">Kind</span><span class="p">}</span> <span class="o">*</span> <span class="p">;</span>
+
+  <span class="n">Arg</span><span class="p">[]</span> <span class="n">args</span><span class="p">;</span>
+ <span class="p">};</span>
+
+<span class="k">struct</span> <span class="n">State</span>
+ <span class="p">{</span>
+  <span class="n">StateIndex</span> <span class="n">index</span><span class="p">;</span>
+  <span class="n">Final</span> <span class="o">*</span><span class="n">final</span><span class="p">;</span>
+
+  <span class="k">struct</span> <span class="n">Transition</span>
+   <span class="p">{</span>
+    <span class="n">Element</span> <span class="o">*</span><span class="n">element</span><span class="p">;</span>
+    <span class="n">State</span> <span class="o">*</span><span class="n">state</span><span class="p">;</span>
+   <span class="p">};</span>
+
+  <span class="n">Transition</span><span class="p">[]</span> <span class="n">transitions</span><span class="p">;</span>
+ <span class="p">};</span>
+
+<span class="k">struct</span> <span class="n">Final</span>
+ <span class="p">{</span>
+  <span class="n">FinalIndex</span> <span class="n">index</span><span class="p">;</span>
+
+  <span class="k">struct</span> <span class="n">Action</span>
+   <span class="p">{</span>
+    <span class="n">Atom</span> <span class="o">*</span><span class="n">atom</span><span class="p">;</span> <span class="c1">// null for (End)</span>
+    <span class="n">Rule</span> <span class="o">*</span><span class="n">rule</span><span class="p">;</span> <span class="c1">// null for &lt;- ( STOP if atom is (END) )</span>
+   <span class="p">};</span>
+
+  <span class="n">Action</span><span class="p">[]</span> <span class="n">actions</span><span class="p">;</span>
+ <span class="p">};</span>
+</pre></div>
+</div>
+<p>And more samples:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">int</span> <span class="n">a</span> <span class="o">=</span> <span class="mi">10</span> <span class="p">;</span>
+
+<span class="kt">int</span> <span class="o">*</span> <span class="n">pa</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">a</span> <span class="p">;</span>
+
+<span class="n">text</span> <span class="p">[</span><span class="n">a</span><span class="p">]</span> <span class="n">B</span> <span class="o">=</span> <span class="p">{</span> <span class="s">&quot;b1&quot;</span> <span class="p">,</span> <span class="s">&quot;b2&quot;</span> <span class="p">}</span> <span class="p">;</span>
+
+<span class="n">text</span> <span class="p">[]</span> <span class="n">C</span> <span class="o">=</span> <span class="p">{</span> <span class="s">&quot;c1&quot;</span> <span class="p">,</span> <span class="s">&quot;c2&quot;</span> <span class="p">}</span> <span class="p">;</span>
+
+<span class="k">struct</span> <span class="n">S</span>
+ <span class="p">{</span>
+  <span class="n">text</span> <span class="n">name</span> <span class="o">=</span> <span class="s">&quot;unnamed&quot;</span> <span class="p">;</span>
+  <span class="kt">int</span> <span class="n">id</span> <span class="o">=</span> <span class="mi">0</span> <span class="p">;</span>
+ <span class="p">};</span>
+
+<span class="n">S</span> <span class="n">record</span> <span class="o">=</span> <span class="p">{</span> <span class="s">&quot;&quot;</span> <span class="p">,</span> <span class="mi">10</span> <span class="p">}</span> <span class="p">;</span>
+</pre></div>
+</div>
+<p>,:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">int</span> <span class="n">a</span> <span class="o">=</span> <span class="mi">10</span> <span class="p">;</span>
+
+<span class="kt">int</span> <span class="o">*</span> <span class="n">pa</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">a</span> <span class="p">;</span>
+
+<span class="kt">int</span> <span class="n">b</span> <span class="o">=</span> <span class="o">*</span><span class="n">pa</span> <span class="p">;</span> <span class="c1">// 10</span>
+
+<span class="kt">int</span><span class="p">[</span><span class="mi">10</span><span class="p">]</span> <span class="n">c</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="mi">9</span><span class="p">}</span> <span class="p">;</span>
+
+<span class="kt">int</span> <span class="o">*</span> <span class="n">pc</span> <span class="o">=</span> <span class="n">c</span><span class="o">+</span><span class="mi">5</span> <span class="p">;</span>
+
+<span class="kt">int</span> <span class="n">d</span> <span class="o">=</span> <span class="o">*</span><span class="n">pc</span> <span class="p">;</span> <span class="c1">// 5</span>
+<span class="kt">int</span> <span class="n">e</span> <span class="o">=</span> <span class="n">pc</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="p">;</span> <span class="c1">// 7</span>
+
+<span class="kt">int</span> <span class="n">l</span> <span class="o">=</span> <span class="n">pc</span> <span class="o">-</span> <span class="n">c</span> <span class="p">;</span> <span class="c1">// 5</span>
+</pre></div>
+</div>
+<p>,:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">type</span> <span class="n">Ptr</span> <span class="o">=</span> <span class="p">{</span><span class="kt">int</span><span class="p">,</span><span class="n">uint</span><span class="p">}</span> <span class="o">*</span> <span class="p">;</span>
+
+<span class="kt">int</span> <span class="n">a</span> <span class="o">=</span> <span class="mi">1</span> <span class="p">;</span>
+
+<span class="n">uint</span> <span class="n">b</span> <span class="o">=</span> <span class="mi">2</span> <span class="p">;</span>
+
+<span class="n">Ptr</span> <span class="n">ptr_a</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">a</span> <span class="p">;</span>
+
+<span class="n">Ptr</span> <span class="n">ptr_b</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">b</span> <span class="p">;</span>
+</pre></div>
+</div>
+<p><strong>DDL</strong> is not intended for the manual data edition.
+Normally <strong>DDL</strong> files are generated by software and used by another software.
+It is a <em>Soft-to-Soft</em> language.
+You can think about it as a “universal data assembler”.
+I am lovely using <strong>DDL</strong> for many years for different purposes:</p>
+<ol class="arabic simple">
+<li><p>configuration files,</p></li>
+<li><p>complex data files, like shown above,</p></li>
+<li><p>Book files, this is a latest GUI component, developed to represent formatted text:</p></li>
+</ol>
+<img alt="../_images/Book.png" src="../_images/Book.png" />
+<p>So I advise everybody learn and use it in your projects.
+You will be loving it too!
+Printing <strong>DDL</strong> files is easy, you can do it using <cite>Printf()</cite>.
+To load data from <strong>DDL</strong> files, however, you need a library.
+<strong>CCore</strong> contains components and tools to do it, but you may develope your own,
+using <strong>CCore</strong> implementtaion as a reference design.</p>
+</div>
+<div class="section" id="synchronization">
+<span id="to-sync"></span><h2>Synchronization<a class="headerlink" href="#synchronization" title="Permalink to this headline">¶</a></h2>
+<p>To develope multi-thread applications a good set of synchronization primitives is required.
+<strong>CCore</strong> defines the following such set:</p>
+<ol class="arabic simple">
+<li><p>Mutex,</p></li>
+<li><p>Sem(aphore),</p></li>
+<li><p>Event,</p></li>
+<li><p>MultiSem,</p></li>
+<li><p>MultiEvent,</p></li>
+<li><p>AntiSem,</p></li>
+<li><p>ResSem.</p></li>
+</ol>
+<p><strong>Mutex</strong> is a usual resource lock synchronization class:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">class</span> <span class="nl">Mutex</span> <span class="p">:</span> <span class="n">NoCopy</span>
+ <span class="p">{</span>
+   <span class="p">....</span>
+
+  <span class="nl">public</span><span class="p">:</span>
+
+   <span class="n">explicit</span> <span class="n">Mutex</span><span class="p">(</span><span class="kt">unsigned</span> <span class="n">spin_count</span><span class="o">=</span><span class="n">MutexSpinCount</span><span class="p">());</span>
+
+   <span class="n">explicit</span> <span class="nf">Mutex</span><span class="p">(</span><span class="n">TextLabel</span> <span class="n">name</span><span class="p">,</span><span class="kt">unsigned</span> <span class="n">spin_count</span><span class="o">=</span><span class="n">MutexSpinCount</span><span class="p">());</span>
+
+   <span class="o">~</span><span class="n">Mutex</span><span class="p">();</span>
+
+   <span class="kt">void</span> <span class="nf">lock</span><span class="p">();</span>
+
+   <span class="kt">void</span> <span class="nf">unlock</span><span class="p">();</span>
+
+   <span class="kt">unsigned</span> <span class="nf">getSemCount</span><span class="p">();</span>
+
+   <span class="n">using</span> <span class="n">Lock</span> <span class="o">=</span> <span class="n">LockObject</span><span class="o">&lt;</span><span class="n">Mutex</span><span class="o">&gt;</span> <span class="p">;</span>
+ <span class="p">};</span>
+</pre></div>
+</div>
+<p><strong>Sem</strong> is a usual semaphore:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">class</span> <span class="nl">Sem</span> <span class="p">:</span> <span class="n">public</span> <span class="n">Funchor_nocopy</span>
+ <span class="p">{</span>
+   <span class="p">....</span>
+
+  <span class="nl">public</span><span class="p">:</span>
+
+   <span class="c1">// constructors</span>
+
+   <span class="n">explicit</span> <span class="n">Sem</span><span class="p">(</span><span class="n">ulen</span> <span class="n">count</span><span class="o">=</span><span class="mi">0</span><span class="p">);</span>
+
+   <span class="n">explicit</span> <span class="nf">Sem</span><span class="p">(</span><span class="n">TextLabel</span> <span class="n">name</span><span class="p">,</span><span class="n">ulen</span> <span class="n">count</span><span class="o">=</span><span class="mi">0</span><span class="p">);</span>
+
+   <span class="o">~</span><span class="n">Sem</span><span class="p">();</span>
+
+   <span class="c1">// give</span>
+
+   <span class="kt">void</span> <span class="nf">give</span><span class="p">();</span>
+
+   <span class="kt">void</span> <span class="nf">give_many</span><span class="p">(</span><span class="n">ulen</span> <span class="n">dcount</span><span class="p">);</span>
+
+   <span class="c1">// take</span>
+
+   <span class="kt">bool</span> <span class="nf">try_take</span><span class="p">();</span>
+
+   <span class="kt">void</span> <span class="nf">take</span><span class="p">();</span>
+
+   <span class="kt">bool</span> <span class="nf">take</span><span class="p">(</span><span class="n">MSec</span> <span class="n">timeout</span><span class="p">);</span>
+
+   <span class="kt">bool</span> <span class="nf">take</span><span class="p">(</span><span class="n">TimeScope</span> <span class="n">time_scope</span><span class="p">);</span>
+
+   <span class="c1">// functions</span>
+
+   <span class="n">Function</span><span class="o">&lt;</span><span class="kt">void</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="o">&gt;</span> <span class="n">function_give</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="n">FunctionOf</span><span class="p">(</span><span class="n">this</span><span class="p">,</span><span class="o">&amp;</span><span class="n">Sem</span><span class="o">::</span><span class="n">give</span><span class="p">);</span> <span class="p">}</span>
+ <span class="p">};</span>
+</pre></div>
+</div>
+<p><strong>CCore</strong> synchronization objects have two main kind of methods: giving and taking.
+Taking methods may block execution of the calling thread.
+So they usually have several variants: without timeout,
+with a timeout in <em>milliseconds</em>,
+with a timeout as a <em>TimeScope</em>,
+and a try variant with the “immediate” timeout.
+If a taking method with a timeout is failed, it returns <strong>false</strong>.
+Giving methods does not block, inversely, they may release a blocked on this synchronization object thread.
+And such methods comes with a callback.
+So you may call these methods indirectly using a light-weight callback <strong>Function&lt;&gt;</strong>.</p>
+<p><strong>TimeScope</strong> is a special method of the specifying a timeout.
+It starts at the moment, the object of this type is created, and lasts for the given period of time:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">class</span> <span class="n">TimeScope</span>
+ <span class="p">{</span>
+   <span class="n">MSecTimer</span> <span class="n">timer</span><span class="p">;</span>
+
+   <span class="n">MSec</span> <span class="n">timeout</span><span class="p">;</span>
+
+  <span class="nl">public</span><span class="p">:</span>
+
+   <span class="n">explicit</span> <span class="n">TimeScope</span><span class="p">(</span><span class="n">MSec</span> <span class="n">timeout_</span><span class="o">=</span><span class="n">Null</span><span class="p">)</span> <span class="nl">noexcept</span> <span class="p">:</span> <span class="n">timeout</span><span class="p">(</span><span class="n">timeout_</span><span class="p">)</span> <span class="p">{}</span>
+
+   <span class="kt">void</span> <span class="n">start</span><span class="p">(</span><span class="n">MSec</span> <span class="n">timeout_</span><span class="p">)</span>
+    <span class="p">{</span>
+     <span class="n">timer</span><span class="p">.</span><span class="n">reset</span><span class="p">();</span>
+
+     <span class="n">timeout</span><span class="o">=</span><span class="n">timeout_</span><span class="p">;</span>
+    <span class="p">}</span>
+
+   <span class="kt">bool</span> <span class="n">nextScope</span><span class="p">();</span>
+
+   <span class="kt">bool</span> <span class="nf">nextScope_skip</span><span class="p">();</span>
+
+   <span class="n">MSec</span> <span class="nf">get</span><span class="p">()</span> <span class="k">const</span>
+    <span class="p">{</span>
+     <span class="k">auto</span> <span class="n">t</span><span class="o">=</span><span class="n">timer</span><span class="p">.</span><span class="n">get</span><span class="p">();</span>
+
+     <span class="k">if</span><span class="p">(</span> <span class="n">t</span> <span class="o">&gt;=</span> <span class="o">+</span><span class="n">timeout</span> <span class="p">)</span> <span class="k">return</span> <span class="n">Null</span><span class="p">;</span>
+
+     <span class="k">return</span> <span class="n">MSec</span><span class="p">(</span><span class="kt">unsigned</span><span class="p">(</span> <span class="o">+</span><span class="n">timeout</span> <span class="o">-</span> <span class="n">t</span> <span class="p">));</span>
+    <span class="p">}</span>
+ <span class="p">};</span>
+</pre></div>
+</div>
+<p>It is very useful if you want to timed a combination of blocking calls:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span> <span class="nf">func</span><span class="p">(</span><span class="n">TimeScope</span> <span class="n">time_scope</span><span class="p">)</span>
+ <span class="p">{</span>
+  <span class="n">op1</span><span class="p">(</span><span class="n">time_scope</span><span class="p">);</span>
+  <span class="n">op2</span><span class="p">(</span><span class="n">time_scope</span><span class="p">);</span>
+  <span class="n">op3</span><span class="p">(</span><span class="n">time_scope</span><span class="p">);</span>
+ <span class="p">}</span>
+
+<span class="kt">void</span> <span class="nf">func</span><span class="p">(</span><span class="n">MSec</span> <span class="n">timeout</span><span class="p">)</span>
+ <span class="p">{</span>
+  <span class="n">TimeScope</span> <span class="n">time_scope</span><span class="p">(</span><span class="n">timeout</span><span class="p">);</span>
+
+  <span class="n">op1</span><span class="p">(</span><span class="n">time_scope</span><span class="p">);</span>
+  <span class="n">op2</span><span class="p">(</span><span class="n">time_scope</span><span class="p">);</span>
+  <span class="n">op3</span><span class="p">(</span><span class="n">time_scope</span><span class="p">);</span>
+ <span class="p">}</span>
+</pre></div>
+</div>
+<p><strong>Event</strong> is a binary semaphore:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">class</span> <span class="nl">Event</span> <span class="p">:</span> <span class="n">public</span> <span class="n">Funchor_nocopy</span>
+ <span class="p">{</span>
+   <span class="p">....</span>
+
+  <span class="nl">public</span><span class="p">:</span>
+
+   <span class="c1">// constructors</span>
+
+   <span class="n">explicit</span> <span class="n">Event</span><span class="p">(</span><span class="kt">bool</span> <span class="n">flag</span><span class="o">=</span><span class="nb">false</span><span class="p">);</span>
+
+   <span class="n">explicit</span> <span class="nf">Event</span><span class="p">(</span><span class="n">TextLabel</span> <span class="n">name</span><span class="p">,</span><span class="kt">bool</span> <span class="n">flag</span><span class="o">=</span><span class="nb">false</span><span class="p">);</span>
+
+   <span class="n">explicit</span> <span class="nf">Event</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">name</span><span class="p">)</span> <span class="o">:</span> <span class="n">Event</span><span class="p">(</span><span class="n">TextLabel</span><span class="p">(</span><span class="n">name</span><span class="p">))</span> <span class="p">{}</span>
+
+   <span class="o">~</span><span class="n">Event</span><span class="p">();</span>
+
+   <span class="c1">// trigger</span>
+
+   <span class="kt">bool</span> <span class="nf">trigger</span><span class="p">();</span>
+
+   <span class="c1">// wait</span>
+
+   <span class="kt">bool</span> <span class="nf">try_wait</span><span class="p">();</span>
+
+   <span class="kt">void</span> <span class="nf">wait</span><span class="p">();</span>
+
+   <span class="kt">bool</span> <span class="nf">wait</span><span class="p">(</span><span class="n">MSec</span> <span class="n">timeout</span><span class="p">);</span>
+
+   <span class="kt">bool</span> <span class="nf">wait</span><span class="p">(</span><span class="n">TimeScope</span> <span class="n">time_scope</span><span class="p">);</span>
+
+   <span class="c1">// functions</span>
+
+   <span class="kt">void</span> <span class="nf">trigger_void</span><span class="p">()</span> <span class="p">{</span> <span class="n">trigger</span><span class="p">();</span> <span class="p">}</span>
+
+   <span class="n">Function</span><span class="o">&lt;</span><span class="kt">void</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="o">&gt;</span> <span class="n">function_trigger</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="n">FunctionOf</span><span class="p">(</span><span class="n">this</span><span class="p">,</span><span class="o">&amp;</span><span class="n">Event</span><span class="o">::</span><span class="n">trigger_void</span><span class="p">);</span> <span class="p">}</span>
+ <span class="p">};</span>
+</pre></div>
+</div>
+<p><strong>MultiSem</strong> is a set of semaphors.
+This class is vital, if you need to handle events from multiple sources.
+For example, if you have to handle device interrupts and user requests in a device driver.
+Or to manage multiple networks connections. And so on:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">template</span> <span class="o">&lt;</span><span class="n">ulen</span> <span class="n">Len</span><span class="o">&gt;</span>
+<span class="n">class</span> <span class="nl">MultiSem</span> <span class="p">:</span> <span class="n">public</span> <span class="n">MultiSemBase</span>
+ <span class="p">{</span>
+   <span class="p">....</span>
+
+  <span class="nl">public</span><span class="p">:</span>
+
+   <span class="n">MultiSem</span><span class="p">();</span>
+
+   <span class="n">explicit</span> <span class="nf">MultiSem</span><span class="p">(</span><span class="n">TextLabel</span> <span class="n">name</span><span class="p">);</span>
+
+   <span class="o">~</span><span class="n">MultiSem</span><span class="p">();</span>
+ <span class="p">};</span>
+
+<span class="n">class</span> <span class="nl">MultiSemBase</span> <span class="p">:</span> <span class="n">public</span> <span class="n">Funchor_nocopy</span>
+ <span class="p">{</span>
+   <span class="p">....</span>
+
+  <span class="nl">public</span><span class="p">:</span>
+
+   <span class="c1">// give</span>
+
+   <span class="kt">void</span> <span class="n">give</span><span class="p">(</span><span class="n">ulen</span> <span class="n">index</span><span class="p">);</span> <span class="c1">// [1,Len]</span>
+
+   <span class="c1">// take</span>
+
+   <span class="n">ulen</span> <span class="nf">try_take</span><span class="p">();</span> <span class="c1">// [0,Len]</span>
+
+   <span class="n">ulen</span> <span class="nf">take</span><span class="p">();</span> <span class="c1">// [1,Len]</span>
+
+   <span class="n">ulen</span> <span class="nf">take</span><span class="p">(</span><span class="n">MSec</span> <span class="n">timeout</span><span class="p">);</span> <span class="c1">// [0,Len]</span>
+
+   <span class="n">ulen</span> <span class="nf">take</span><span class="p">(</span><span class="n">TimeScope</span> <span class="n">time_scope</span><span class="p">);</span> <span class="c1">// [0,Len]</span>
+
+   <span class="c1">// give&lt;Index&gt;</span>
+
+   <span class="n">template</span> <span class="o">&lt;</span><span class="n">ulen</span> <span class="n">Index</span><span class="o">&gt;</span> <span class="c1">// [1,Len]</span>
+   <span class="kt">void</span> <span class="n">give_index</span><span class="p">()</span> <span class="p">{</span> <span class="n">give</span><span class="p">(</span><span class="n">Index</span><span class="p">);</span> <span class="p">}</span>
+
+   <span class="c1">// functions</span>
+
+   <span class="n">template</span> <span class="o">&lt;</span><span class="n">ulen</span> <span class="n">Index</span><span class="o">&gt;</span>
+   <span class="n">Function</span><span class="o">&lt;</span><span class="kt">void</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="o">&gt;</span> <span class="n">function_give</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="n">FunctionOf</span><span class="p">(</span><span class="n">this</span><span class="p">,</span><span class="o">&amp;</span><span class="n">MultiSemBase</span><span class="o">::</span><span class="n">give_index</span><span class="o">&lt;</span><span class="n">Index</span><span class="o">&gt;</span><span class="p">);</span> <span class="p">}</span>
+ <span class="p">};</span>
+</pre></div>
+</div>
+<p>When you use <strong>MultiSem</strong>, you give some index (of event), <cite>take()</cite> returns an available index in the round-robing manner.</p>
+<p><strong>MultiEvent</strong> is a set of events. It is similar to the <strong>MultiSem</strong>, but designed based on <strong>Events</strong>, not <strong>Sems</strong>:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">template</span> <span class="o">&lt;</span><span class="n">ulen</span> <span class="n">Len</span><span class="o">&gt;</span>
+<span class="n">class</span> <span class="nl">MultiEvent</span> <span class="p">:</span> <span class="n">public</span> <span class="n">MultiEventBase</span>
+ <span class="p">{</span>
+   <span class="p">....</span>
+
+  <span class="nl">public</span><span class="p">:</span>
+
+   <span class="n">MultiEvent</span><span class="p">();</span>
+
+   <span class="n">explicit</span> <span class="nf">MultiEvent</span><span class="p">(</span><span class="n">TextLabel</span> <span class="n">name</span><span class="p">);</span>
+
+   <span class="o">~</span><span class="n">MultiEvent</span><span class="p">();</span>
+ <span class="p">};</span>
+
+<span class="n">class</span> <span class="nl">MultiEventBase</span> <span class="p">:</span> <span class="n">public</span> <span class="n">Funchor_nocopy</span>
+ <span class="p">{</span>
+   <span class="p">....</span>
+
+  <span class="nl">public</span><span class="p">:</span>
+
+   <span class="c1">// trigger</span>
+
+   <span class="kt">bool</span> <span class="n">trigger</span><span class="p">(</span><span class="n">ulen</span> <span class="n">index</span><span class="p">);</span> <span class="c1">// [1,Len]</span>
+
+   <span class="c1">// wait</span>
+
+   <span class="n">ulen</span> <span class="nf">try_wait</span><span class="p">();</span> <span class="c1">// [0,Len]</span>
+
+   <span class="n">ulen</span> <span class="nf">wait</span><span class="p">();</span> <span class="c1">// [1,Len]</span>
+
+   <span class="n">ulen</span> <span class="nf">wait</span><span class="p">(</span><span class="n">MSec</span> <span class="n">timeout</span><span class="p">);</span> <span class="c1">// [0,Len]</span>
+
+   <span class="n">ulen</span> <span class="nf">wait</span><span class="p">(</span><span class="n">TimeScope</span> <span class="n">time_scope</span><span class="p">);</span> <span class="c1">// [0,Len]</span>
+
+   <span class="c1">// trigger&lt;Index&gt;</span>
+
+   <span class="n">template</span> <span class="o">&lt;</span><span class="n">ulen</span> <span class="n">Index</span><span class="o">&gt;</span> <span class="c1">// [1,Len]</span>
+   <span class="kt">void</span> <span class="n">trigger_index</span><span class="p">()</span> <span class="p">{</span> <span class="n">trigger</span><span class="p">(</span><span class="n">Index</span><span class="p">);</span> <span class="p">}</span>
+
+   <span class="c1">// functions</span>
+
+   <span class="n">template</span> <span class="o">&lt;</span><span class="n">ulen</span> <span class="n">Index</span><span class="o">&gt;</span>
+   <span class="n">Function</span><span class="o">&lt;</span><span class="kt">void</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="o">&gt;</span> <span class="n">function_trigger</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="n">FunctionOf</span><span class="p">(</span><span class="n">this</span><span class="p">,</span><span class="o">&amp;</span><span class="n">MultiEventBase</span><span class="o">::</span><span class="n">trigger_index</span><span class="o">&lt;</span><span class="n">Index</span><span class="o">&gt;</span><span class="p">);</span> <span class="p">}</span>
+ <span class="p">};</span>
+</pre></div>
+</div>
+<p><strong>AntiSem</strong> is a “gateway”. A thread can wait on this synchronization object until the internal counter of the
+object becomes below the defined level (0 by default).
+This synchronization object is useful for waiting of completion of multiple activities (like completion of multiple tasks)
+or releasing of number of resources:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">class</span> <span class="nl">AntiSem</span> <span class="p">:</span> <span class="n">public</span> <span class="n">Funchor_nocopy</span>
+ <span class="p">{</span>
+   <span class="p">....</span>
+
+  <span class="nl">public</span><span class="p">:</span>
+
+   <span class="c1">// constructors</span>
+
+   <span class="n">explicit</span> <span class="n">AntiSem</span><span class="p">(</span><span class="n">ulen</span> <span class="n">level</span><span class="o">=</span><span class="mi">0</span><span class="p">);</span>
+
+   <span class="n">explicit</span> <span class="nf">AntiSem</span><span class="p">(</span><span class="n">TextLabel</span> <span class="n">name</span><span class="p">,</span><span class="n">ulen</span> <span class="n">level</span><span class="o">=</span><span class="mi">0</span><span class="p">);</span>
+
+   <span class="o">~</span><span class="n">AntiSem</span><span class="p">();</span>
+
+   <span class="c1">// add/sub</span>
+
+   <span class="kt">void</span> <span class="nf">add</span><span class="p">(</span><span class="n">ulen</span> <span class="n">dcount</span><span class="p">);</span>
+
+   <span class="kt">void</span> <span class="nf">sub</span><span class="p">(</span><span class="n">ulen</span> <span class="n">dcount</span><span class="p">);</span>
+
+   <span class="c1">// inc/dec</span>
+
+   <span class="kt">void</span> <span class="nf">inc</span><span class="p">()</span> <span class="p">{</span> <span class="n">add</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span> <span class="p">}</span>
+
+   <span class="kt">void</span> <span class="nf">dec</span><span class="p">()</span> <span class="p">{</span> <span class="n">sub</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span> <span class="p">}</span>
+
+   <span class="c1">// wait</span>
+
+   <span class="kt">bool</span> <span class="nf">try_wait</span><span class="p">();</span>
+
+   <span class="kt">void</span> <span class="nf">wait</span><span class="p">();</span>
+
+   <span class="kt">bool</span> <span class="nf">wait</span><span class="p">(</span><span class="n">MSec</span> <span class="n">timeout</span><span class="p">);</span>
+
+   <span class="kt">bool</span> <span class="nf">wait</span><span class="p">(</span><span class="n">TimeScope</span> <span class="n">time_scope</span><span class="p">);</span>
+
+   <span class="c1">// functions</span>
+
+   <span class="n">Function</span><span class="o">&lt;</span><span class="kt">void</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="o">&gt;</span> <span class="n">function_inc</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="n">FunctionOf</span><span class="p">(</span><span class="n">this</span><span class="p">,</span><span class="o">&amp;</span><span class="n">AntiSem</span><span class="o">::</span><span class="n">inc</span><span class="p">);</span> <span class="p">}</span>
+
+   <span class="n">Function</span><span class="o">&lt;</span><span class="kt">void</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="o">&gt;</span> <span class="n">function_dec</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="n">FunctionOf</span><span class="p">(</span><span class="n">this</span><span class="p">,</span><span class="o">&amp;</span><span class="n">AntiSem</span><span class="o">::</span><span class="n">dec</span><span class="p">);</span> <span class="p">}</span>
+ <span class="p">};</span>
+</pre></div>
+</div>
+<p><strong>ResSem</strong> is a hybrid of <strong>ResSem</strong> and <strong>Sem</strong>:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">class</span> <span class="nl">ResSem</span> <span class="p">:</span> <span class="n">public</span> <span class="n">Funchor_nocopy</span>
+ <span class="p">{</span>
+   <span class="p">....</span>
+
+  <span class="nl">public</span><span class="p">:</span>
+
+   <span class="c1">// constructors</span>
+
+   <span class="n">explicit</span> <span class="n">ResSem</span><span class="p">(</span><span class="n">ulen</span> <span class="n">max_count</span><span class="p">);</span>
+
+   <span class="n">ResSem</span><span class="p">(</span><span class="n">TextLabel</span> <span class="n">name</span><span class="p">,</span><span class="n">ulen</span> <span class="n">max_count</span><span class="p">);</span>
+
+   <span class="o">~</span><span class="n">ResSem</span><span class="p">();</span>
+
+   <span class="c1">// give</span>
+
+   <span class="kt">void</span> <span class="nf">give</span><span class="p">();</span>
+
+   <span class="c1">// take</span>
+
+   <span class="kt">bool</span> <span class="nf">try_take</span><span class="p">();</span>
+
+   <span class="kt">void</span> <span class="nf">take</span><span class="p">();</span>
+
+   <span class="kt">bool</span> <span class="nf">take</span><span class="p">(</span><span class="n">MSec</span> <span class="n">timeout</span><span class="p">);</span>
+
+   <span class="kt">bool</span> <span class="nf">take</span><span class="p">(</span><span class="n">TimeScope</span> <span class="n">time_scope</span><span class="p">);</span>
+
+   <span class="c1">// wait</span>
+
+   <span class="kt">bool</span> <span class="nf">try_wait</span><span class="p">();</span>
+
+   <span class="kt">void</span> <span class="nf">wait</span><span class="p">();</span>
+
+   <span class="kt">bool</span> <span class="nf">wait</span><span class="p">(</span><span class="n">MSec</span> <span class="n">timeout</span><span class="p">);</span>
+
+   <span class="kt">bool</span> <span class="nf">wait</span><span class="p">(</span><span class="n">TimeScope</span> <span class="n">time_scope</span><span class="p">);</span>
+
+   <span class="c1">// functions</span>
+
+   <span class="n">Function</span><span class="o">&lt;</span><span class="kt">void</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="o">&gt;</span> <span class="n">function_give</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="n">FunctionOf</span><span class="p">(</span><span class="n">this</span><span class="p">,</span><span class="o">&amp;</span><span class="n">ResSem</span><span class="o">::</span><span class="n">give</span><span class="p">);</span> <span class="p">}</span>
+ <span class="p">};</span>
+</pre></div>
+</div>
+<p>It has an internal counter, which remains in the range <cite>[0,max_count]</cite>,
+where <strong>max_count</strong> is a <strong>ResSem</strong> counter limit.
+Initially the counter equals <strong>max_count</strong>.
+Like a usual semaphore, <strong>ResSem</strong> has <cite>take()</cite> and <cite>give()</cite> operations,
+but it has the additional “gateway” operation <cite>wait()</cite>, which blocks the calling thread until the counter gets back to its maximum value.</p>
+</div>
+<div class="section" id="packets">
+<span id="to-packets"></span><h2>Packets<a class="headerlink" href="#packets" title="Permalink to this headline">¶</a></h2>
+<p>When we design a system level services, we need to serve a massive tide of requests,
+coming independently from multiple tasks.
+Consider, for example, a network service stack.
+Application level tasks issue requests to send network packets, each packet has a body
+and destination address.
+Each of this requests must be processed, address must be resolved, body must be updated,
+finally, packet comes to a network card driver, which sends it on the wire.
+To develope such subsystems some basic infrustructure is required.
+The whole subsystem is a set of processing entities, they send to each other <em>packets</em>,
+each packet is some data structure with attached <em>completion routine</em>.
+Once a packet is handled, it sends to a next processing unit, or completed.
+<strong>CCore</strong> contains such infrustructure, <strong>Packets</strong>, and number of devices, which
+provides various packet services.
+For example, <strong>AsyncUDPMultipointDevice</strong> sends and receives <strong>UDP</strong> packets:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">class</span> <span class="nl">AsyncUDPMultipointDevice</span> <span class="p">:</span> <span class="n">public</span> <span class="n">PacketMultipointDevice</span>
+ <span class="p">{</span>
+   <span class="p">....</span>
+
+  <span class="nl">public</span><span class="p">:</span>
+
+   <span class="c1">// constructors</span>
+
+   <span class="k">static</span> <span class="n">constexpr</span> <span class="n">ulen</span> <span class="n">DefaultMaxPackets</span> <span class="o">=</span> <span class="mi">500</span> <span class="p">;</span>
+
+   <span class="n">explicit</span> <span class="nf">AsyncUDPMultipointDevice</span><span class="p">(</span><span class="n">UDPort</span> <span class="n">udport</span><span class="p">,</span><span class="n">ulen</span> <span class="n">max_packets</span><span class="o">=</span><span class="n">DefaultMaxPackets</span><span class="p">);</span>
+
+   <span class="n">virtual</span> <span class="o">~</span><span class="n">AsyncUDPMultipointDevice</span><span class="p">();</span>
+
+   <span class="c1">// PacketMultipointDevice</span>
+
+   <span class="n">virtual</span> <span class="n">StrLen</span> <span class="nf">toText</span><span class="p">(</span><span class="n">XPoint</span> <span class="n">point</span><span class="p">,</span><span class="n">PtrLen</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;</span> <span class="n">buf</span><span class="p">)</span> <span class="k">const</span><span class="p">;</span>
+
+   <span class="n">virtual</span> <span class="n">PacketFormat</span> <span class="nf">getOutboundFormat</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
+
+   <span class="n">virtual</span> <span class="kt">void</span> <span class="nf">outbound</span><span class="p">(</span><span class="n">XPoint</span> <span class="n">point</span><span class="p">,</span><span class="n">Packet</span><span class="o">&lt;</span><span class="n">uint8</span><span class="o">&gt;</span> <span class="n">packet</span><span class="p">);</span>
+
+   <span class="n">virtual</span> <span class="n">ulen</span> <span class="nf">getMaxInboundLen</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
+
+   <span class="n">virtual</span> <span class="kt">void</span> <span class="nf">attach</span><span class="p">(</span><span class="n">InboundProc</span> <span class="o">*</span><span class="n">proc</span><span class="p">);</span>
+
+   <span class="n">virtual</span> <span class="kt">void</span> <span class="nf">detach</span><span class="p">();</span>
+
+   <span class="p">....</span>
+ <span class="p">};</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="networking">
+<span id="to-net"></span><h2>Networking<a class="headerlink" href="#networking" title="Permalink to this headline">¶</a></h2>
+<p><strong>CCore</strong> implements a set of packet-processing classes for network applications.
+To work with network an abstraction layer is used.
+It is presented with two abstract classes: <strong>PacketEndpointDevice</strong> and <strong>PacketMultipointDevice</strong>:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">struct</span> <span class="n">PacketEndpointDevice</span>
+ <span class="p">{</span>
+  <span class="c1">// outbound</span>
+
+  <span class="n">virtual</span> <span class="n">PacketFormat</span> <span class="n">getOutboundFormat</span><span class="p">()</span> <span class="k">const</span> <span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+
+  <span class="n">virtual</span> <span class="kt">void</span> <span class="nf">outbound</span><span class="p">(</span><span class="n">Packet</span><span class="o">&lt;</span><span class="n">uint8</span><span class="o">&gt;</span> <span class="n">packet</span><span class="p">)</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+
+  <span class="c1">// inbound</span>
+
+  <span class="n">virtual</span> <span class="n">ulen</span> <span class="nf">getMaxInboundLen</span><span class="p">()</span> <span class="k">const</span> <span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+
+  <span class="k">struct</span> <span class="nl">InboundProc</span> <span class="p">:</span> <span class="n">InterfaceHost</span>
+   <span class="p">{</span>
+    <span class="n">virtual</span> <span class="kt">void</span> <span class="n">inbound</span><span class="p">(</span><span class="n">Packet</span><span class="o">&lt;</span><span class="n">uint8</span><span class="o">&gt;</span> <span class="n">packet</span><span class="p">,</span><span class="n">PtrLen</span><span class="o">&lt;</span><span class="k">const</span> <span class="n">uint8</span><span class="o">&gt;</span> <span class="n">data</span><span class="p">)</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+
+    <span class="n">virtual</span> <span class="kt">void</span> <span class="nf">tick</span><span class="p">()</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+   <span class="p">};</span>
+
+  <span class="n">virtual</span> <span class="kt">void</span> <span class="nf">attach</span><span class="p">(</span><span class="n">InboundProc</span> <span class="o">*</span><span class="n">proc</span><span class="p">)</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+
+  <span class="n">virtual</span> <span class="kt">void</span> <span class="nf">detach</span><span class="p">()</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+ <span class="p">};</span>
+
+<span class="k">struct</span> <span class="n">PacketMultipointDevice</span>
+ <span class="p">{</span>
+  <span class="n">virtual</span> <span class="n">StrLen</span> <span class="n">toText</span><span class="p">(</span><span class="n">XPoint</span> <span class="n">point</span><span class="p">,</span><span class="n">PtrLen</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;</span> <span class="n">buf</span><span class="p">)</span> <span class="k">const</span> <span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+
+  <span class="c1">// outbound</span>
+
+  <span class="n">virtual</span> <span class="n">PacketFormat</span> <span class="nf">getOutboundFormat</span><span class="p">()</span> <span class="k">const</span> <span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+
+  <span class="n">virtual</span> <span class="kt">void</span> <span class="nf">outbound</span><span class="p">(</span><span class="n">XPoint</span> <span class="n">point</span><span class="p">,</span><span class="n">Packet</span><span class="o">&lt;</span><span class="n">uint8</span><span class="o">&gt;</span> <span class="n">packet</span><span class="p">)</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+
+  <span class="c1">// inbound</span>
+
+  <span class="n">virtual</span> <span class="n">ulen</span> <span class="nf">getMaxInboundLen</span><span class="p">()</span> <span class="k">const</span> <span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+
+  <span class="k">struct</span> <span class="nl">InboundProc</span> <span class="p">:</span> <span class="n">InterfaceHost</span>
+   <span class="p">{</span>
+    <span class="k">static</span> <span class="k">const</span> <span class="n">Unid</span> <span class="n">TypeUnid</span><span class="p">;</span>
+
+    <span class="n">virtual</span> <span class="kt">void</span> <span class="nf">inbound</span><span class="p">(</span><span class="n">XPoint</span> <span class="n">point</span><span class="p">,</span><span class="n">Packet</span><span class="o">&lt;</span><span class="n">uint8</span><span class="o">&gt;</span> <span class="n">packet</span><span class="p">,</span><span class="n">PtrLen</span><span class="o">&lt;</span><span class="k">const</span> <span class="n">uint8</span><span class="o">&gt;</span> <span class="n">data</span><span class="p">)</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+
+    <span class="n">virtual</span> <span class="kt">void</span> <span class="nf">tick</span><span class="p">()</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+   <span class="p">};</span>
+
+  <span class="n">virtual</span> <span class="kt">void</span> <span class="nf">attach</span><span class="p">(</span><span class="n">InboundProc</span> <span class="o">*</span><span class="n">proc</span><span class="p">)</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+
+  <span class="n">virtual</span> <span class="kt">void</span> <span class="nf">detach</span><span class="p">()</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+ <span class="p">};</span>
+</pre></div>
+</div>
+<p>First of them is used for point-to-point communications, second – for point-to-multipoint.
+The first case is typical for client applications, but the second – for the server ones.
+There are classes like <strong>UDPEndpointDevice</strong> to establish a communication using the <strong>UDP</strong> protocol.</p>
+<p><strong>CCore</strong> implements a set of new application-level network protocols like <strong>PTP</strong>.
+<strong>PTP</strong> is the “Packet Transaction Protocol”.
+This is a packet-based, reliable, transactional, parallel point-to-point protocol.
+It is best suited to implement an asynchronous call-type client-server interaction.
+<strong>PTP</strong> defines rules for two endpoints, one is the <strong>Server</strong>, another is the <strong>Client</strong>.
+These endpoints exchange raw data packets (byte packets).
+<strong>Client</strong> issues call requests, <strong>Server</strong> takes call data, processes it and returns some resulting data.
+From the <strong>Client</strong> perspective, it makes a function call.
+Function arguments is a byte range.
+<strong>Server</strong> “evaluates” the function and returns a result — another byte range.
+The meaning of data is out of scope <strong>PTP</strong> protocol, it is defined by an upper protocol level.
+Usually, <strong>Server</strong> may serve multiple <strong>Clients</strong>.
+From the protocol perspective all transactions are parallel and independent.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">CCore brief</a><ul>
+<li><a class="reference internal" href="#ab-ovo">Ab ovo</a></li>
+<li><a class="reference internal" href="#heap">Heap</a></li>
+<li><a class="reference internal" href="#printf"><cite>Printf()</cite></a><ul>
+<li><a class="reference internal" href="#printer-class">Printer class</a></li>
+<li><a class="reference internal" href="#printable-types">Printable types</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#exceptions">Exceptions</a></li>
+<li><a class="reference internal" href="#ddl">DDL</a></li>
+<li><a class="reference internal" href="#synchronization">Synchronization</a></li>
+<li><a class="reference internal" href="#packets">Packets</a></li>
+<li><a class="reference internal" href="#networking">Networking</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="../index.html"
+                        title="previous chapter">Welcome to CCore documentation!</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="../test/test.html"
+                        title="next chapter">Sphinx test</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/brief/brief.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../test/test.html" title="Sphinx test"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="../index.html" title="Welcome to CCore documentation!"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">CCore  documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, Sergey Strukov.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.1.
+    </div>
+  </body>
+</html>

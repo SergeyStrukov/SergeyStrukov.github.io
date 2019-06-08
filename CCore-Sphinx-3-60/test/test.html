@@ -1,0 +1,180 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Sphinx test page &#8212; CCore  documentation</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="CCore brief" href="../brief/brief.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../brief/brief.html" title="CCore brief"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">CCore  documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="sphinx-test">
+<h1>Sphinx test<a class="headerlink" href="#sphinx-test" title="Permalink to this headline">¶</a></h1>
+<p>This page is intended for the testing sphinx capabilities.</p>
+<div class="section" id="text-formats">
+<h2>Text formats<a class="headerlink" href="#text-formats" title="Permalink to this headline">¶</a></h2>
+<p><em>Italic text</em>.</p>
+<p><strong>Bold text</strong>.</p>
+<ol class="arabic simple">
+<li><p>List item 1.</p></li>
+</ol>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>Inner list 1.1.</p></li>
+<li><p>Inner list 1.2.</p></li>
+</ol>
+</div></blockquote>
+<ol class="arabic simple" start="2">
+<li><p>List item 2.</p></li>
+</ol>
+</div>
+<div class="section" id="latex">
+<h2>LaTex<a class="headerlink" href="#latex" title="Permalink to this headline">¶</a></h2>
+<div class="math notranslate nohighlight">
+\[ \begin{align}\begin{aligned}Пусть\ a \in \mathbb{Z} ,\ p \nmid a . Положим\\G\left(\frac{a}{p}\right):=\sum_{0 \leqslant x &lt; p}^{} e^{ \displaystyle 2 \pi i \frac{a x^2}{p} }\end{aligned}\end{align} \]</div>
+</div>
+<div class="section" id="c-code">
+<h2>C++ code<a class="headerlink" href="#c-code" title="Permalink to this headline">¶</a></h2>
+<p>code:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">template</span> <span class="o">&lt;</span><span class="n">CursorType</span> <span class="n">R</span><span class="p">,</span><span class="n">class</span> <span class="n">T</span><span class="o">&gt;</span> <span class="n">requires</span> <span class="p">(</span> <span class="n">CursorOverType</span><span class="o">&lt;</span><span class="n">R</span><span class="p">,</span><span class="n">T</span><span class="o">&gt;</span> <span class="p">)</span>
+<span class="n">class</span> <span class="nl">PrintSet</span> <span class="p">:</span> <span class="n">public</span> <span class="n">PrintOptAdapter</span><span class="o">&lt;</span> <span class="n">Meta</span><span class="o">::</span><span class="n">UnConst</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="o">&gt;</span>
+ <span class="p">{</span>
+   <span class="n">R</span> <span class="n">range</span><span class="p">;</span>
+
+  <span class="nl">private</span><span class="p">:</span>
+
+   <span class="n">template</span> <span class="o">&lt;</span><span class="n">class</span> <span class="n">S</span><span class="o">&gt;</span>
+   <span class="k">static</span> <span class="k">const</span> <span class="n">T</span> <span class="o">&amp;</span> <span class="n">Cast</span><span class="p">(</span><span class="k">const</span> <span class="n">S</span> <span class="o">&amp;</span><span class="n">obj</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="n">obj</span><span class="p">;</span> <span class="p">}</span>
+
+  <span class="nl">public</span><span class="p">:</span>
+
+   <span class="n">explicit</span> <span class="n">PrintSet</span><span class="p">(</span><span class="k">const</span> <span class="n">R</span> <span class="o">&amp;</span><span class="n">range_</span><span class="p">)</span> <span class="o">:</span> <span class="n">range</span><span class="p">(</span><span class="n">range_</span><span class="p">)</span> <span class="p">{}</span>
+
+   <span class="kt">void</span> <span class="n">print</span><span class="p">(</span><span class="n">PrinterType</span> <span class="o">&amp;</span><span class="n">out</span><span class="p">)</span> <span class="k">const</span>
+    <span class="p">{</span>
+     <span class="n">R</span> <span class="n">r</span><span class="o">=</span><span class="n">range</span><span class="p">;</span>
+
+     <span class="k">if</span><span class="p">(</span> <span class="o">+</span><span class="n">r</span> <span class="p">)</span>
+       <span class="p">{</span>
+        <span class="n">Putobj</span><span class="p">(</span><span class="n">out</span><span class="p">,</span><span class="s">&quot;{ &quot;</span><span class="n">_c</span><span class="p">,</span><span class="n">Cast</span><span class="p">(</span><span class="o">*</span><span class="n">r</span><span class="p">));</span>
+
+        <span class="k">for</span><span class="p">(</span><span class="o">++</span><span class="n">r</span><span class="p">;</span> <span class="o">+</span><span class="n">r</span> <span class="p">;</span><span class="o">++</span><span class="n">r</span><span class="p">)</span> <span class="n">Putobj</span><span class="p">(</span><span class="n">out</span><span class="p">,</span><span class="s">&quot; , &quot;</span><span class="n">_c</span><span class="p">,</span><span class="n">Cast</span><span class="p">(</span><span class="o">*</span><span class="n">r</span><span class="p">));</span>
+
+        <span class="n">Putobj</span><span class="p">(</span><span class="n">out</span><span class="p">,</span><span class="s">&quot; }&quot;</span><span class="n">_c</span><span class="p">);</span>
+       <span class="p">}</span>
+     <span class="k">else</span>
+       <span class="p">{</span>
+        <span class="n">Putobj</span><span class="p">(</span><span class="n">out</span><span class="p">,</span><span class="s">&quot;{ }&quot;</span><span class="n">_c</span><span class="p">);</span>
+       <span class="p">}</span>
+    <span class="p">}</span>
+
+   <span class="kt">void</span> <span class="n">print</span><span class="p">(</span><span class="n">PrinterType</span> <span class="o">&amp;</span><span class="n">out</span><span class="p">,</span><span class="k">const</span> <span class="n">AnyType</span> <span class="o">&amp;</span><span class="n">opt</span><span class="p">)</span> <span class="k">const</span>
+    <span class="p">{</span>
+     <span class="n">R</span> <span class="n">r</span><span class="o">=</span><span class="n">range</span><span class="p">;</span>
+
+     <span class="k">if</span><span class="p">(</span> <span class="o">+</span><span class="n">r</span> <span class="p">)</span>
+       <span class="p">{</span>
+        <span class="n">Putobj</span><span class="p">(</span><span class="n">out</span><span class="p">,</span><span class="s">&quot;{ &quot;</span><span class="n">_c</span><span class="p">,</span><span class="n">BindOpt</span><span class="p">(</span><span class="n">opt</span><span class="p">,</span><span class="n">Cast</span><span class="p">(</span><span class="o">*</span><span class="n">r</span><span class="p">)));</span>
+
+        <span class="k">for</span><span class="p">(</span><span class="o">++</span><span class="n">r</span><span class="p">;</span> <span class="o">+</span><span class="n">r</span> <span class="p">;</span><span class="o">++</span><span class="n">r</span><span class="p">)</span> <span class="n">Putobj</span><span class="p">(</span><span class="n">out</span><span class="p">,</span><span class="s">&quot; , &quot;</span><span class="n">_c</span><span class="p">,</span><span class="n">BindOpt</span><span class="p">(</span><span class="n">opt</span><span class="p">,</span><span class="n">Cast</span><span class="p">(</span><span class="o">*</span><span class="n">r</span><span class="p">)));</span>
+
+        <span class="n">Putobj</span><span class="p">(</span><span class="n">out</span><span class="p">,</span><span class="s">&quot; }&quot;</span><span class="n">_c</span><span class="p">);</span>
+       <span class="p">}</span>
+     <span class="k">else</span>
+       <span class="p">{</span>
+        <span class="n">Putobj</span><span class="p">(</span><span class="n">out</span><span class="p">,</span><span class="s">&quot;{ }&quot;</span><span class="n">_c</span><span class="p">);</span>
+       <span class="p">}</span>
+    <span class="p">}</span>
+ <span class="p">};</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Sphinx test</a><ul>
+<li><a class="reference internal" href="#text-formats">Text formats</a></li>
+<li><a class="reference internal" href="#latex">LaTex</a></li>
+<li><a class="reference internal" href="#c-code">C++ code</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="../brief/brief.html"
+                        title="previous chapter">CCore brief</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/test/test.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../brief/brief.html" title="CCore brief"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">CCore  documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, Sergey Strukov.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.1.
+    </div>
+  </body>
+</html>
